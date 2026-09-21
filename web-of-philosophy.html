@@ -1,0 +1,2247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Noösphere: a living map of philosophy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gloock&family=Schibsted+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light dark;
+  --bg:#e6ecef; --bg2:#f5f8f9; --ink:#14232b; --ink2:#4d636b;
+  --panel:rgba(248,251,252,.9); --line:rgba(20,35,43,.15); --edge:38,62,74;
+  --out:#b8690a; --in:#0b7f86; --opp:#c2413f; --halo:rgba(240,245,247,.9);
+  --accent:#0f5f74; --tipbg:rgba(252,253,253,.98); --neb:.17; --shadow:0 10px 34px rgba(20,35,43,.16); --hover:rgba(20,35,43,.07);
+  --f-display:'Gloock',Georgia,'Times New Roman',serif;
+  --f-ui:'Schibsted Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0b151a; --bg2:#14252c; --ink:#e7efeb; --ink2:#93a9b0;
+    --panel:rgba(16,29,35,.88); --line:rgba(231,239,235,.14); --edge:168,196,206;
+    --out:#f2b84b; --in:#5cd0d6; --opp:#ff7b78; --halo:rgba(11,21,26,.88);
+    --accent:#f2b84b; --tipbg:rgba(19,36,44,.98); --neb:.14; --shadow:0 12px 40px rgba(0,0,0,.45); --hover:rgba(231,239,235,.08);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0b151a; --bg2:#14252c; --ink:#e7efeb; --ink2:#93a9b0;
+  --panel:rgba(16,29,35,.88); --line:rgba(231,239,235,.14); --edge:168,196,206;
+  --out:#f2b84b; --in:#5cd0d6; --opp:#ff7b78; --halo:rgba(11,21,26,.88);
+  --accent:#f2b84b; --tipbg:rgba(19,36,44,.98); --neb:.14; --shadow:0 12px 40px rgba(0,0,0,.45); --hover:rgba(231,239,235,.08);
+}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;height:100%;position:relative;overflow:hidden;background:var(--bg);color:var(--ink);font-family:var(--f-ui);font-size:15px;-webkit-font-smoothing:antialiased}
+[hidden]{display:none!important}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#c{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:grab}
+#c:active{cursor:grabbing}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+.top{position:absolute;top:14px;left:16px;right:16px;display:flex;gap:12px;align-items:flex-start;pointer-events:none;z-index:5}
+.top>*{pointer-events:auto}
+.brand{min-width:0}
+.brand h1{font-family:var(--f-display);font-weight:400;font-size:clamp(28px,3.2vw,40px);line-height:1.05;margin:0;letter-spacing:-.01em;text-shadow:0 0 14px var(--bg),0 0 4px var(--bg)}
+.brand p{margin:5px 0 0;font-size:13px;color:var(--ink2);text-shadow:0 0 10px var(--bg)}
+.searchwrap{position:relative;margin-left:14px;width:min(330px,100%)}
+#q{width:100%;box-sizing:border-box;padding:10px 14px;background:var(--panel);border:1px solid var(--line);border-radius:12px;font-size:15px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+#q::placeholder{color:var(--ink2)}
+.results{position:absolute;top:100%;left:0;right:0;margin:6px 0 0;padding:4px;list-style:none;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);z-index:10}
+.res{display:flex;align-items:center;gap:9px;width:100%;padding:8px 10px;background:none;border:0;border-radius:8px;text-align:left;cursor:pointer}
+.res:hover,.res.active{background:var(--hover)}
+.res .rt{margin-left:auto;font-size:12px;color:var(--ink2)}
+.dot{flex:none;width:10px;height:10px;border-radius:50%;background:var(--c)}
+.tools{margin-left:auto;display:flex;gap:8px}
+.btn{padding:9px 13px;background:var(--panel);border:1px solid var(--line);border-radius:10px;font-size:14px;cursor:pointer;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);white-space:nowrap}
+.btn:hover{background:var(--hover)}
+
+.legend{position:absolute;left:16px;bottom:16px;width:240px;max-height:calc(100% - 150px);overflow:auto;box-sizing:border-box;padding:10px 8px 8px;background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);z-index:4}
+.legend h2{margin:4px 8px 4px;font-size:13px;font-weight:600;color:var(--ink2)}
+.legend .sec+.sec{margin-top:8px;padding-top:6px;border-top:1px solid var(--line)}
+.chipbtn{display:flex;align-items:center;gap:9px;width:100%;box-sizing:border-box;padding:5px 8px;background:none;border:0;border-radius:8px;font-size:13.5px;text-align:left;cursor:pointer}
+.chipbtn:hover{background:var(--hover)}
+.chipbtn .n{margin-left:auto;font-size:12px;color:var(--ink2);font-variant-numeric:tabular-nums}
+.chipbtn[aria-pressed="false"]{opacity:.42}
+.chipbtn[aria-pressed="false"] .dot{background:transparent;box-shadow:inset 0 0 0 1.6px var(--c)}
+.chipbtn svg{flex:none}
+.key{display:flex;align-items:center;gap:9px;padding:4px 8px;font-size:13px;color:var(--ink2)}
+.reset{margin:0 8px 2px auto;display:block;background:none;border:0;padding:2px 4px;font-size:12.5px;color:var(--accent);cursor:pointer;text-decoration:underline}
+
+#panel{position:absolute;top:64px;right:16px;bottom:16px;width:348px;box-sizing:border-box;overflow:auto;padding:18px 18px 22px;background:var(--panel);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);z-index:6}
+#panel .close{position:absolute;top:10px;right:10px;width:32px;height:32px;border:0;border-radius:50%;background:none;cursor:pointer;font-size:20px;line-height:1;color:var(--ink2)}
+#panel .close:hover{background:var(--hover)}
+.kind{display:flex;align-items:center;gap:8px;margin-right:34px;font-size:13px;color:var(--ink2)}
+.name{font-family:var(--f-display);font-weight:400;font-size:29px;line-height:1.1;margin:6px 0 10px;letter-spacing:-.005em}
+.desc{margin:0 0 4px;font-size:14.5px;line-height:1.5;color:var(--ink)}
+.psec h3{display:flex;align-items:center;gap:8px;margin:16px 0 7px;font-size:13px;font-weight:600;color:var(--ink2)}
+.psec h3::before{content:"";width:16px;height:0;border-top:2px solid var(--m,var(--ink2))}
+.psec.opp h3::before{border-top-style:dashed}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:4px 11px 4px 9px;background:none;border:1px solid var(--line);border-radius:999px;font-size:13px;cursor:pointer}
+.chip:hover{background:var(--hover)}
+.chip.static{cursor:default}
+.chip.static:hover{background:none}
+.chip .dot{width:8px;height:8px}
+.trace{margin-top:20px;padding-top:14px;border-top:1px solid var(--line)}
+.trace label{display:block;margin-bottom:7px;font-size:13px;font-weight:600;color:var(--ink2)}
+.trace .searchwrap{margin:0;width:100%}
+.trace input{width:100%;box-sizing:border-box;padding:9px 12px;background:transparent;border:1px solid var(--line);border-radius:10px;font-size:14px}
+.trace .results{top:auto;bottom:100%;margin:0 0 6px}
+
+#pathbar{position:absolute;left:272px;right:16px;bottom:16px;max-height:34%;overflow:auto;box-sizing:border-box;padding:12px 16px 14px;background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);z-index:5}
+body.panel-open #pathbar{right:380px}
+#pathbar .ph{display:flex;align-items:center;gap:12px;margin-bottom:9px}
+#pathbar .ph strong{font-family:var(--f-display);font-weight:400;font-size:18px}
+#pathbar .ph .btn{margin-left:auto;padding:5px 10px;font-size:13px}
+#chain{display:flex;flex-wrap:wrap;align-items:center;gap:7px 3px}
+#chain .rel{padding:0 5px;font-size:12.5px;color:var(--accent);font-style:italic}
+
+#hint{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);padding:8px 16px;background:var(--panel);border:1px solid var(--line);border-radius:999px;font-size:13.5px;color:var(--ink2);pointer-events:none;transition:opacity .7s;z-index:3;white-space:nowrap}
+#hint.gone{opacity:0}
+#fail{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center;z-index:20;background:var(--bg)}
+
+.btn.ico{width:38px;padding:9px 0;text-align:center;font-size:19px;line-height:1}
+.chiprow{display:flex;align-items:center;border-radius:8px}
+.chiprow:hover{background:var(--hover)}
+.chiprow .chipbtn:hover{background:none}
+.chiprow.off .go{opacity:.42}
+.chiprow.off .dot{background:transparent;box-shadow:inset 0 0 0 1.6px var(--c)}
+.eye{flex:none;width:30px;height:28px;padding:0;display:grid;place-items:center;background:none;border:0;border-radius:8px;color:var(--ink2);cursor:pointer}
+.eye:hover{color:var(--ink)}
+.eye .slash{display:none}
+.eye[aria-pressed="false"] .slash{display:block}
+.eye[aria-pressed="false"]{opacity:.7}
+.back{display:block;margin:0 34px 8px 0;padding:0;background:none;border:0;font-size:13px;color:var(--accent);cursor:pointer;text-decoration:underline;text-align:left}
+.meta{margin:6px 0 0;font-size:13px;color:var(--ink2)}
+[data-tip]{cursor:inherit}
+#tip{position:fixed;left:0;top:0;z-index:30;max-width:272px;box-sizing:border-box;padding:10px 13px 11px;background:var(--tipbg);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);pointer-events:none;font-size:13.5px;line-height:1.45}
+#tip .tk{display:flex;align-items:center;gap:7px;margin-bottom:4px;font-size:12px;color:var(--ink2)}
+#tip .tk .dot{width:8px;height:8px}
+#tip .tt{margin-bottom:4px;font-family:var(--f-display);font-size:17px;line-height:1.15}
+#tip .tb{color:var(--ink)}
+@media (max-width:759px){
+  .top{flex-wrap:wrap;top:10px;left:12px;right:12px;gap:8px}
+  .brand{flex:1 1 0}
+  .tools{margin-left:0}
+  .tools .btn{padding:8px 10px;font-size:13px}
+  .btn.ico{display:none}
+  .searchwrap{order:3;flex:1 1 100%;width:100%;margin-left:0}
+  .legend{left:0;right:0;bottom:0;width:auto;max-height:none;display:flex;gap:4px;overflow-x:auto;overflow-y:hidden;padding:8px 10px;border-radius:16px 16px 0 0;border-width:1px 0 0}
+  .legend .sec{display:flex;gap:4px;margin:0;padding:0;border:0!important}
+  .legend h2,.legend .keys,.legend .reset{display:none}
+  .legend .chipbtn{width:auto;flex:none;white-space:nowrap;border:1px solid var(--line);border-radius:999px;padding:6px 11px}
+  .legend .chipbtn .n{display:none}
+  .legend .chiprow{flex:none;border:1px solid var(--line);border-radius:999px}
+  .legend .chiprow .chipbtn{border:0;border-radius:999px 0 0 999px;padding:6px 4px 6px 11px}
+  .legend .chiprow .eye{width:34px;height:32px}
+  #panel{top:auto;left:8px;right:8px;bottom:8px;width:auto;max-height:54%;padding:16px}
+  body.panel-open .legend{display:none}
+  #pathbar{left:8px;right:8px;bottom:60px;max-height:30%}
+  body.panel-open #pathbar{right:8px;bottom:calc(54% + 16px)}
+  #hint{bottom:66px;white-space:normal;text-align:center;width:max-content;max-width:88%}
+}
+@media (prefers-reduced-motion:reduce){#hint{transition:none}}
+</style>
+</head>
+<body>
+<canvas id="c" role="img" aria-label="Interactive network of philosophical concepts, schools and thinkers. Use the search box to explore it as a list."></canvas>
+
+<header class="top">
+  <div class="brand">
+    <h1 data-tip-title="Noösphere" data-tip="From the Greek for mind: the shared sphere of human thought. This is a living map of how philosophical ideas, schools and thinkers connect. Hover or long-press anything for a short description.">Noösphere</h1>
+    <p id="stats" data-tip="The number of nodes on the map and the connections between them: influence, contrast and relatedness."></p>
+  </div>
+  <div class="searchwrap">
+    <input id="q" data-tip="Search every thinker, concept and school by name. Press the slash key to jump here." type="search" placeholder="Find a thinker, concept or school" autocomplete="off" aria-label="Search the web">
+    <ul class="results" id="qres" role="listbox" hidden></ul>
+  </div>
+  <div class="tools">
+    <button class="btn" id="btnSurprise" type="button" data-tip="Picks two ideas from different fields and highlights the chain of connections that links them.">Surprise me</button>
+    <button class="btn ico" id="btnZoomOut" type="button" aria-label="Zoom out" data-tip="Zoom out. Keyboard: the minus key.">&minus;</button>
+    <button class="btn ico" id="btnZoomIn" type="button" aria-label="Zoom in" data-tip="Zoom in. Keyboard: the plus key. You can also double-click empty space.">+</button>
+    <button class="btn" id="btnFit" type="button" data-tip="Clears any selection or path and fits the whole web on screen.">Reset view</button>
+  </div>
+</header>
+
+<aside id="panel" hidden aria-label="Details"></aside>
+<div id="pathbar" hidden>
+  <div class="ph"><strong id="pathTitle" data-tip="The shortest chain of connections between the two ideas, using only real links and not the field hubs where possible."></strong><button class="btn" id="btnClearPath" type="button" data-tip="Removes the highlighted path from the map.">Clear path</button></div>
+  <div id="chain"></div>
+</div>
+<nav class="legend" id="legend" aria-label="Filters"></nav>
+<div id="hint">Hover anything for a description. Scroll or use + and − to zoom, drag to move, click a node to explore.</div>
+<div class="sr" id="live" aria-live="polite"></div>
+<div id="tip" role="tooltip" hidden></div>
+<div id="fail" hidden><p>The graph library could not be loaded. Check your connection and reload the page.</p></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script>
+/* ===== DATA ===== */
+const GROUPS = {
+  R:{name:"Philosophy",            color:"#c9d1d9"},
+  M:{name:"Metaphysics",           color:"#ff9f43"},
+  E:{name:"Epistemology",          color:"#3fc1e8"},
+  T:{name:"Ethics",                color:"#ff6b6b"},
+  P:{name:"Political Philosophy",  color:"#a08cff"},
+  A:{name:"Aesthetics",            color:"#ff7eb6"},
+  L:{name:"Logic & Language",      color:"#7bd66b"},
+  N:{name:"Philosophy of Mind",    color:"#5b86ff"},
+  S:{name:"Science & Pragmatism",  color:"#1fc9a0"},
+  X:{name:"Existence & Religion",  color:"#d95cf0"},
+  W:{name:"Eastern & Non-Western", color:"#f2c744"}
+};
+const ORDER = ["E","S","L","N","M","X","W","T","P","A"];
+const FIELD_NAMES = {M:"Metaphysics",E:"Epistemology",T:"Ethics",P:"Political Philosophy",A:"Aesthetics",L:"Logic & Language",N:"Philosophy of Mind",S:"Philosophy of Science",X:"Existence & Religion",W:"Eastern & Non-Western Thought"};
+const FIELD_DESC = {
+  R:"The systematic questioning of what exists, what we can know, how we should live and how we should organize ourselves. Every field below grows from this root.",
+  M:"What exists, and what is its ultimate nature? Being, substance, time, causation, identity and freedom.",
+  E:"What can we know, and how? Knowledge, justification, truth, doubt and the limits of the senses and reason.",
+  T:"How should we live, and what do we owe each other? Virtue, duty, consequences, rights and moral status.",
+  P:"Power, authority, justice and freedom in shared life: who should rule, and why.",
+  A:"Beauty, art, taste and the sublime, and what it means to judge or make something aesthetically.",
+  L:"Valid reasoning, formal systems, paradox, and the relation between words, meaning and the world.",
+  N:"Consciousness, the self, and how mind relates to body, brain and machine.",
+  S:"How science works: evidence, explanation, theory change, and what pragmatic inquiry can deliver.",
+  X:"Freedom, death, anxiety, meaning, faith and the divine, from medieval theology to existential thought.",
+  W:"Indian, Chinese, Japanese and other non-Western traditions, often reaching the same questions by different roads."
+};
+
+const NODES = {
+M:{
+ concept:"Being|Existence|Substance|Causation|Free Will|Determinism|Time|Space|Identity|Personal Identity|Universals|Forms|Essence|Possible Worlds|Necessity|Nothingness|Becoming|Mereology|Emergence|Properties|Fatalism|Persistence|Ontology|Teleology|Principle of Sufficient Reason",
+ school:"Materialism|Idealism|Dualism|Monism|Nominalism|Compatibilism|Atomism|Platonism|Aristotelianism|Neoplatonism|Pre-Socratics|Scholasticism|Process Philosophy|German Idealism|Hegelianism",
+ thinker:"Thales|Heraclitus|Parmenides|Zeno of Elea|Democritus|Pythagoras|Plato|Aristotle|Plotinus|Spinoza|Leibniz|Bergson|Whitehead|David Lewis|Hegel|Fichte|Schelling|Duns Scotus|Boethius"
+},
+E:{
+ concept:"Knowledge|Justified True Belief|Gettier Problem|Skepticism|Truth|Perception|Innate Ideas|Certainty|Cartesian Doubt|Cogito|Tabula Rasa|A Priori|A Posteriori|Analytic-Synthetic Distinction|Problem of Induction|Epistemic Justification|Sense Data|Phenomena and Noumena|Brain in a Vat|Perspectivism|Correspondence Theory of Truth",
+ school:"Rationalism|Empiricism|Foundationalism|Coherentism|Reliabilism|Pyrrhonism|Transcendental Idealism|Phenomenalism|Constructivism",
+ thinker:"Descartes|Locke|Berkeley|Hume|Kant|Pyrrho|Sextus Empiricus|Francis Bacon|Edmund Gettier|Quine"
+},
+T:{
+ concept:"Virtue|Eudaimonia|Categorical Imperative|Good|Duty|Justice|Autonomy|Moral Luck|Trolley Problem|Egoism|Altruism|Is-Ought Problem|Natural Law|Moral Responsibility|Utility|Golden Mean|Open Question Argument|Animal Ethics|Ataraxia|Good Will|Supererogation|Value Pluralism",
+ school:"Utilitarianism|Deontology|Virtue Ethics|Consequentialism|Care Ethics|Contractualism|Emotivism|Stoicism|Epicureanism|Cynicism|Kantian Ethics|Hedonism|Meta-ethics|Moral Realism|Moral Relativism",
+ thinker:"Socrates|Epicurus|Lucretius|Zeno of Citium|Epictetus|Marcus Aurelius|Seneca|Diogenes|Bentham|John Stuart Mill|G.E. Moore|Elizabeth Anscombe|Philippa Foot|Peter Singer|Derek Parfit|Martha Nussbaum|Bernard Williams|Alasdair MacIntyre|Emmanuel Levinas|Carol Gilligan"
+},
+P:{
+ concept:"Social Contract|State of Nature|Liberty|Equality|Sovereignty|Property|Legitimacy|Power|Ideology|Alienation|Class Struggle|Veil of Ignorance|Civil Disobedience|Human Rights|Totalitarianism|Cosmopolitanism|Hegemony|Biopower|General Will|Separation of Powers|Panopticon|Banality of Evil|Public Sphere|Distributive Justice|Tyranny of the Majority|Negative and Positive Liberty|Surplus Value|Commodity Fetishism|Dialectical Materialism|Master-Slave Dialectic",
+ school:"Liberalism|Conservatism|Marxism|Communism|Capitalism|Libertarianism|Republicanism|Anarchism|Democracy|Communitarianism|Feminism|Critical Theory|Frankfurt School|Postcolonialism|Enlightenment|Political Realism",
+ thinker:"Machiavelli|Hobbes|Rousseau|Montesquieu|Voltaire|Mary Wollstonecraft|Adam Smith|Marx|Engels|Tocqueville|Mikhail Bakunin|Rawls|Nozick|Hannah Arendt|Adorno|Horkheimer|Herbert Marcuse|Habermas|Foucault|Gramsci|Frantz Fanon|Edward Said|Judith Butler|Isaiah Berlin"
+},
+A:{
+ concept:"Beauty|The Sublime|Taste|Art|Mimesis|Catharsis|Aesthetic Judgment|Disinterestedness|Genius|Tragedy|Apollonian and Dionysian|Aura|Aesthetic Experience",
+ school:"Formalism|Romanticism|Institutional Theory of Art|Expression Theory|Aestheticism",
+ thinker:"Alexander Baumgarten|Friedrich Schiller|Edmund Burke|Longinus|Arthur Danto|Walter Benjamin|R.G. Collingwood|Nelson Goodman|Susanne Langer|Clive Bell"
+},
+L:{
+ concept:"Deduction|Validity|Soundness|Syllogism|Paradox|Liar Paradox|Russell's Paradox|Sorites Paradox|Zeno's Paradoxes|Incompleteness|Fallacy|Dialectic|Law of Non-Contradiction|Infinity|Set Theory|Propositional Logic|Predicate Logic|Modal Logic|Formal Systems|Computability|Paraconsistent Logic|Meaning|Reference|Sense and Reference|Speech Acts|Language Games|Private Language Argument|Semantics|Pragmatics|Linguistic Turn|Verification Principle|Rigid Designation|Differance|Semiotics|Metaphor|Vagueness|Implicature",
+ school:"Analytic Philosophy|Continental Philosophy|Logical Positivism|Logicism|Intuitionism|Mathematical Platonism|Mathematical Formalism|Ordinary Language Philosophy|Structuralism|Poststructuralism|Postmodernism|Deconstruction|Hermeneutics",
+ thinker:"Frege|Russell|Wittgenstein|Carnap|Gödel|Tarski|Saussure|J.L. Austin|Kripke|Chomsky|Derrida|Grice|A.J. Ayer|Gadamer|Lévi-Strauss|George Boole|Turing|Ricoeur"
+},
+N:{
+ concept:"Consciousness|Qualia|Mind-Body Problem|Hard Problem of Consciousness|Intentionality|Other Minds|Chinese Room|Artificial Intelligence|Self|Philosophical Zombie|Mental Causation|Extended Mind|Introspection|Mary's Room|Turing Test|Multiple Realizability|Embodiment|Lifeworld|Epoché",
+ school:"Functionalism|Physicalism|Behaviorism|Epiphenomenalism|Panpsychism|Eliminative Materialism|Embodied Cognition|Phenomenology|Identity Theory|Property Dualism",
+ thinker:"Husserl|Franz Brentano|Merleau-Ponty|Searle|Nagel|Chalmers|Dennett|Putnam|Gilbert Ryle|Paul Churchland|Frank Jackson|Andy Clark"
+},
+S:{
+ concept:"Falsifiability|Paradigm Shift|Explanation|Underdetermination|Scientific Method|Occam's Razor|Laws of Nature|Probability|Theory-Ladenness|Demarcation Problem|Incommensurability|Confirmation|Natural Selection|Anthropic Principle|Pragmatic Maxim|Fallibilism|Naturalized Epistemology",
+ school:"Scientific Realism|Instrumentalism|Reductionism|Naturalism|Pragmatism|Bayesianism|Constructive Empiricism|Vitalism|Neopragmatism|Positivism",
+ thinker:"Galileo|Auguste Comte|Peirce|William James|John Dewey|Popper|Thomas Kuhn|Imre Lakatos|Paul Feyerabend|Bas van Fraassen|Thomas Bayes|William of Ockham|Charles Darwin|Rorty"
+},
+X:{
+ concept:"God|Problem of Evil|Ontological Argument|Cosmological Argument|Teleological Argument|Faith|Pascal's Wager|Theodicy|Free Will Defense|Mysticism|Negative Theology|Transcendence|Immanence|Divine Command Theory|Death|Meaning of Life|The Absurd|Anxiety|Existential Freedom|Bad Faith|Authenticity|Existence Precedes Essence|Dasein|Thrownness|Being-toward-Death|Eternal Recurrence|Will to Power|Übermensch|Amor Fati|Death of God|Master-Slave Morality|Ressentiment|Nihilism|Leap of Faith|The Other|The Gaze|I-Thou",
+ school:"Existentialism|Existential Phenomenology|Absurdism|Pessimism|Theism|Atheism|Agnosticism|Pantheism|Deism|Fideism|Islamic Philosophy",
+ thinker:"Augustine|Anselm|Aquinas|Avicenna|Averroes|Al-Ghazali|Maimonides|Meister Eckhart|Pascal|Kierkegaard|Nietzsche|Schopenhauer|Heidegger|Sartre|Simone de Beauvoir|Camus|Dostoevsky|Karl Jaspers|Martin Buber"
+},
+W:{
+ concept:"Dao|Wu Wei|Yin-Yang|Ren|Ritual (Li)|Principle (Li)|Junzi|Filial Piety|Unity of Knowledge and Action|Butterfly Dream|Dharma|Karma|Samsara|Nirvana|Anatta|Sunyata|Dependent Origination|Middle Way|Four Noble Truths|Brahman|Atman|Maya|Moksha|Ahimsa|Zazen|Mindfulness|Pure Experience|Ubuntu|Wabi-sabi",
+ school:"Confucianism|Daoism|Buddhism|Advaita Vedanta|Madhyamaka|Yogacara|Zen|Legalism|Mohism|Jainism|Neo-Confucianism|Kyoto School|Samkhya|Nyaya|Charvaka",
+ thinker:"Confucius|Laozi|Zhuangzi|Mencius|Xunzi|Mozi|Han Fei|Buddha|Nagarjuna|Vasubandhu|Shankara|Dogen|Zhu Xi|Wang Yangming|Nishida Kitaro|Mahavira"
+}
+};
+
+/*  Edge DSL.   A > B, C   A influenced B and C (directed)
+                A = B, C   A is closely related to B and C
+                A ~ B, C   A contrasts with / opposes B and C           */
+const EDGES = `
+# ---------- fields ----------
+Metaphysics = Epistemology, Philosophy of Mind, Philosophy of Science, Existence & Religion, Logic & Language, Eastern & Non-Western Thought
+Epistemology = Philosophy of Science, Logic & Language, Philosophy of Mind, Aesthetics
+Ethics = Political Philosophy, Existence & Religion, Metaphysics, Aesthetics, Eastern & Non-Western Thought, Philosophy of Mind
+Political Philosophy = Aesthetics, Philosophy of Science, Existence & Religion
+Logic & Language = Philosophy of Science, Philosophy of Mind
+Eastern & Non-Western Thought = Philosophy of Mind, Existence & Religion, Epistemology, Political Philosophy
+
+# ---------- pre-socratics ----------
+Thales = Pre-Socratics, Monism, Materialism
+Heraclitus = Pre-Socratics, Becoming, Dialectic, Monism
+Heraclitus ~ Parmenides
+Parmenides = Pre-Socratics, Being, Monism, Nothingness
+Parmenides > Plato, Zeno of Elea
+Zeno of Elea = Zeno's Paradoxes, Infinity, Space, Time
+Democritus = Atomism, Materialism, Determinism, Pre-Socratics
+Democritus > Epicurus
+Pythagoras = Pre-Socratics, Mathematical Platonism, Being
+Pythagoras > Plato
+Yin-Yang = Dialectic, Becoming
+
+# ---------- classical ----------
+Socrates = Virtue, Dialectic, Good, Justice, Skepticism
+Socrates > Plato, Diogenes
+Plato = Platonism, Forms, Universals, Knowledge, Justified True Belief, Justice, Beauty, Good, Innate Ideas, Mimesis
+Plato > Aristotle, Plotinus, Augustine
+Platonism = Forms, Universals, Mathematical Platonism, Idealism
+Platonism > Neoplatonism
+Platonism ~ Nominalism, Aristotelianism
+Forms = Universals, Essence, Beauty, Good
+Nominalism = Universals, Occam's Razor
+Aristotle = Aristotelianism, Substance, Essence, Causation, Teleology, Being, Eudaimonia, Virtue Ethics, Golden Mean, Virtue, Syllogism, Deduction, Law of Non-Contradiction, Tragedy, Catharsis, Mimesis
+Aristotle > Aquinas, Avicenna, Averroes, Maimonides, Scholasticism
+Aristotelianism = Substance, Essence, Teleology, Virtue Ethics, Scholasticism
+Plotinus = Neoplatonism, Transcendence, Mysticism, Being
+Plotinus > Augustine
+Neoplatonism > Scholasticism, Mysticism, Islamic Philosophy
+Epicurus = Epicureanism, Hedonism, Ataraxia, Atomism, Death, Problem of Evil
+Epicurus > Lucretius
+Lucretius = Epicureanism, Atomism
+Epicureanism ~ Stoicism
+Epicureanism = Hedonism, Ataraxia
+Zeno of Citium = Stoicism
+Zeno of Citium > Epictetus, Seneca
+Seneca > Marcus Aurelius
+Epictetus = Stoicism, Ataraxia, Autonomy
+Marcus Aurelius = Stoicism, Duty, Virtue
+Seneca = Stoicism, Death
+Stoicism = Determinism, Fatalism, Compatibilism, Virtue, Amor Fati, Cosmopolitanism, Duty, Ataraxia
+Stoicism > Spinoza
+Diogenes = Cynicism, Cosmopolitanism
+Cynicism > Stoicism
+Pyrrho = Pyrrhonism, Skepticism, Ataraxia, Buddhism
+Sextus Empiricus = Pyrrhonism, Skepticism
+Pyrrhonism = Skepticism, Ataraxia
+Pyrrhonism > Hume
+
+# ---------- medieval ----------
+Augustine = God, Time, Free Will, Problem of Evil, Faith, Theodicy, Neoplatonism
+Augustine > Aquinas, Anselm
+Boethius = Free Will, Fatalism, Time, Scholasticism, Neoplatonism
+Anselm = Ontological Argument, Faith, God, Scholasticism
+Aquinas = Scholasticism, Natural Law, Cosmological Argument, Teleological Argument, God, Virtue Ethics, Faith, Aristotelianism
+Aquinas ~ Ontological Argument
+Avicenna = Islamic Philosophy, Essence, Existence, Cosmological Argument, Aristotelianism, Neoplatonism
+Avicenna > Aquinas
+Averroes = Islamic Philosophy, Aristotelianism, Faith
+Averroes > Aquinas
+Al-Ghazali = Islamic Philosophy, Causation, Skepticism, Mysticism, Faith
+Al-Ghazali ~ Avicenna, Averroes
+Maimonides = Negative Theology, God, Aristotelianism, Faith
+Duns Scotus = Scholasticism, Universals, Free Will, Being, Essence
+William of Ockham = Nominalism, Occam's Razor, Scholasticism, Universals
+Duns Scotus ~ William of Ockham
+Meister Eckhart = Mysticism, Negative Theology, God
+Scholasticism = Faith, Natural Law
+Islamic Philosophy = Aristotelianism, Faith
+
+# ---------- early modern ----------
+Francis Bacon = Empiricism, Scientific Method, Problem of Induction
+Francis Bacon > Locke, Hobbes
+Galileo = Scientific Method, Laws of Nature, Space, Naturalism
+Descartes = Rationalism, Cogito, Cartesian Doubt, Dualism, Mind-Body Problem, Certainty, Innate Ideas, Substance, God, Ontological Argument, Brain in a Vat, Foundationalism, Skepticism, Self
+Descartes > Spinoza, Leibniz, Locke
+Rationalism ~ Empiricism
+Rationalism = A Priori, Innate Ideas, Principle of Sufficient Reason
+Empiricism = A Posteriori, Perception, Sense Data, Tabula Rasa
+Empiricism > Logical Positivism, Pragmatism
+Spinoza = Monism, Substance, Determinism, Pantheism, God, Rationalism, Free Will
+Spinoza > Hegel, Schelling, Nietzsche
+Leibniz = Rationalism, Substance, Possible Worlds, Theodicy, Problem of Evil, Identity, Principle of Sufficient Reason
+Leibniz > Kant, Frege
+Voltaire ~ Leibniz
+Locke = Empiricism, Tabula Rasa, Personal Identity, Property, Social Contract, Liberty, Human Rights, Perception, Substance, Liberalism
+Locke > Berkeley, Hume, Liberalism, Enlightenment
+Berkeley = Idealism, Empiricism, Perception, God, Phenomenalism
+Berkeley > Hume
+Hume = Empiricism, Skepticism, Causation, Problem of Induction, Is-Ought Problem, Personal Identity, Self, Taste, Emotivism, Analytic-Synthetic Distinction, Free Will, Compatibilism, Problem of Evil, Anatta
+Hume > Kant, A.J. Ayer, Logical Positivism
+Hobbes = State of Nature, Social Contract, Sovereignty, Materialism, Egoism, Power, Political Realism
+Hobbes > Rousseau, Locke
+Hobbes ~ Rousseau
+Machiavelli = Political Realism, Power, Republicanism
+Rousseau = General Will, Social Contract, Liberty, Equality, Democracy, Romanticism, Enlightenment
+Rousseau > Kant
+Montesquieu = Separation of Powers, Republicanism, Enlightenment, Liberalism
+Voltaire = Enlightenment, Deism, Problem of Evil, Liberty
+Pascal = Pascal's Wager, Faith, Probability, Fideism, Death
+Pascal ~ Rationalism
+Mary Wollstonecraft = Feminism, Equality, Enlightenment, Human Rights
+Adam Smith = Capitalism, Property, Liberalism, Enlightenment
+Adam Smith > Marx
+Edmund Burke = Conservatism, The Sublime, Beauty, Taste
+Edmund Burke ~ Enlightenment
+Enlightenment = Rationalism, Empiricism, Liberalism, Democracy, Human Rights, Deism, Cosmopolitanism
+Romanticism ~ Enlightenment
+Romanticism = The Sublime, Genius, Expression Theory, German Idealism
+Alexander Baumgarten = Taste, Beauty, Aesthetic Experience
+Alexander Baumgarten > Kant
+Longinus = The Sublime, Genius
+
+# ---------- kant & german idealism ----------
+Kant = Transcendental Idealism, Phenomena and Noumena, Categorical Imperative, Kantian Ethics, Deontology, Duty, Autonomy, Good Will, Aesthetic Judgment, Disinterestedness, The Sublime, Beauty, Genius, Analytic-Synthetic Distinction, A Priori, A Posteriori, Enlightenment, Cosmopolitanism, Rationalism, Empiricism, Free Will, Space, Time, Causation, Ontological Argument
+Kant > Fichte, Friedrich Schiller, Hegel, Schopenhauer, Husserl, Rawls, German Idealism
+Kant ~ Utilitarianism
+Kantian Ethics = Categorical Imperative, Good Will, Autonomy, Duty
+Kantian Ethics ~ Consequentialism
+Transcendental Idealism = Phenomena and Noumena, A Priori, Space, Time, Causation
+Fichte = German Idealism, Idealism, Self, Autonomy
+Fichte > Schelling, Hegel
+Schelling = German Idealism, Idealism, Romanticism, Monism
+Schelling > Hegel
+Friedrich Schiller = Romanticism, Beauty, Liberty, Aesthetic Experience
+Friedrich Schiller > Hegel
+Hegel = Hegelianism, German Idealism, Dialectic, Idealism, Liberty, Master-Slave Dialectic, Being, Becoming, Nothingness, Tragedy
+Hegel > Marx, Kierkegaard, Arthur Danto
+Hegel ~ Kierkegaard, Schopenhauer
+Hegelianism = Dialectic, Idealism
+Hegelianism > Marxism
+German Idealism = Idealism, Romanticism
+Idealism ~ Materialism
+Idealism = Perception, Consciousness
+Russell ~ Hegelianism, Idealism
+
+# ---------- nineteenth century ----------
+Schopenhauer = Pessimism, Idealism, Beauty, Art, Buddhism, Transcendental Idealism
+Schopenhauer > Nietzsche, Wittgenstein
+Kierkegaard = Existentialism, Leap of Faith, Anxiety, Faith, Authenticity, Fideism, The Absurd, Existential Freedom
+Kierkegaard > Heidegger, Sartre, Camus, Karl Jaspers
+Nietzsche = Will to Power, Übermensch, Eternal Recurrence, Amor Fati, Death of God, Nihilism, Master-Slave Morality, Ressentiment, Apollonian and Dionysian, Tragedy, Genius, Perspectivism, Pessimism
+Nietzsche > Heidegger, Sartre, Foucault, Derrida, Camus, Postmodernism, Existentialism
+Nietzsche ~ Kantian Ethics, Utilitarianism
+Bentham = Utilitarianism, Utility, Hedonism, Consequentialism, Panopticon
+Bentham > John Stuart Mill
+John Stuart Mill = Utilitarianism, Liberty, Liberalism, Utility, Consequentialism, Feminism, Tyranny of the Majority, Empiricism
+John Stuart Mill ~ G.E. Moore
+G.E. Moore = Open Question Argument, Good, Meta-ethics, Analytic Philosophy, Moral Realism, Russell
+Auguste Comte = Positivism, Scientific Method, Empiricism
+Auguste Comte > Logical Positivism
+Peirce = Pragmatism, Pragmatic Maxim, Fallibilism, Semiotics, Problem of Induction, Truth
+Peirce > William James, John Dewey
+William James = Pragmatism, Truth, Consciousness, Faith, Free Will, Self
+William James > John Dewey, Nishida Kitaro
+John Dewey = Pragmatism, Democracy, Aesthetic Experience, Naturalism
+John Dewey > Rorty
+Charles Darwin = Natural Selection, Naturalism, Teleology, Materialism
+Charles Darwin ~ Teleology
+Charles Darwin > Pragmatism, Dennett, Nietzsche
+Marx = Marxism, Communism, Class Struggle, Alienation, Surplus Value, Commodity Fetishism, Dialectical Materialism, Ideology, Capitalism, Materialism, Property
+Marx = Engels
+Marx > Gramsci, Adorno, Horkheimer, Herbert Marcuse, Frankfurt School, Critical Theory, Sartre, Frantz Fanon
+Marx ~ Capitalism, Liberalism
+Engels = Marxism, Dialectical Materialism, Communism, Class Struggle
+Tocqueville = Democracy, Tyranny of the Majority, Liberty, Equality, Liberalism
+Mikhail Bakunin = Anarchism, Liberty
+Mikhail Bakunin ~ Marxism
+George Boole = Propositional Logic, Formal Systems
+George Boole > Turing
+Marxism = Dialectical Materialism, Class Struggle, Alienation
+Marxism ~ Capitalism, Liberalism
+Communism = Marxism, Class Struggle
+Communism ~ Libertarianism
+Capitalism = Property, Liberalism, Commodity Fetishism
+Surplus Value = Capitalism
+Commodity Fetishism = Capitalism
+Dialectical Materialism = Materialism, Dialectic
+Master-Slave Dialectic = Alienation, The Other
+
+# ---------- phenomenology & existentialism ----------
+Franz Brentano = Intentionality, Consciousness, Introspection
+Franz Brentano > Husserl
+Husserl = Phenomenology, Epoché, Intentionality, Lifeworld, Consciousness
+Husserl > Heidegger, Merleau-Ponty, Sartre, Emmanuel Levinas, Existential Phenomenology
+Heidegger = Dasein, Being, Being-toward-Death, Thrownness, Authenticity, Anxiety, Existential Phenomenology, Hermeneutics, Nothingness, Time, Death, Nihilism
+Heidegger > Sartre, Hannah Arendt, Derrida, Gadamer, Foucault, Emmanuel Levinas, Merleau-Ponty, Kyoto School
+Heidegger ~ Analytic Philosophy
+Sartre = Existentialism, Existence Precedes Essence, Bad Faith, Existential Freedom, The Other, The Gaze, Nothingness, Authenticity, Existential Phenomenology, Marxism, Atheism
+Sartre = Simone de Beauvoir
+Sartre > Frantz Fanon
+Sartre ~ Camus
+Simone de Beauvoir = Existentialism, Feminism, The Other, Existential Freedom
+Simone de Beauvoir > Judith Butler
+Camus = Absurdism, The Absurd, Meaning of Life, Nihilism, Existential Freedom, Existentialism
+Camus ~ Leap of Faith
+Dostoevsky = Nihilism, Faith, Existentialism, Problem of Evil, Death of God
+Dostoevsky > Camus, Nietzsche
+Karl Jaspers = Existentialism, Existential Freedom, Transcendence, Authenticity
+Karl Jaspers > Hannah Arendt
+Martin Buber = I-Thou, The Other, Theism, Existentialism
+Martin Buber > Emmanuel Levinas
+Emmanuel Levinas = The Other, Phenomenology, Justice
+Emmanuel Levinas ~ Heidegger
+Merleau-Ponty = Phenomenology, Embodiment, Perception, Existential Phenomenology, Embodied Cognition, Lifeworld
+Existentialism = Existence Precedes Essence, Authenticity, Existential Freedom, Anxiety, Death, Meaning of Life
+Existentialism > Absurdism
+Existential Phenomenology = Existentialism, Phenomenology
+Phenomenology = Consciousness, Lifeworld, Intentionality
+Continental Philosophy = Phenomenology, Existentialism, Hermeneutics, Critical Theory
+Continental Philosophy ~ Analytic Philosophy
+Dasein = Being-toward-Death, Thrownness, Being
+Anxiety = Existential Freedom, Being-toward-Death
+Existential Freedom = Authenticity, Bad Faith, Existence Precedes Essence, Free Will
+The Absurd = Absurdism, Meaning of Life
+Meaning of Life = Nihilism, Eudaimonia
+Nihilism = Moral Relativism, Death of God
+Death of God = Atheism
+Eternal Recurrence = Amor Fati, Time
+Will to Power = Übermensch
+Master-Slave Morality = Ressentiment
+The Other = The Gaze, I-Thou, Feminism, Postcolonialism
+Pessimism = Nihilism
+Death = Being-toward-Death, Meaning of Life
+
+# ---------- logic & language ----------
+Frege = Analytic Philosophy, Sense and Reference, Predicate Logic, Logicism, Meaning, Reference
+Frege > Russell, Wittgenstein, Carnap
+Russell = Analytic Philosophy, Logicism, Russell's Paradox, Set Theory, Meaning, Reference, Paradox, Infinity, Sense Data, Knowledge, Whitehead
+Russell > Wittgenstein, Carnap, A.J. Ayer
+Whitehead = Process Philosophy, Becoming, Substance, Time, God
+Wittgenstein = Language Games, Private Language Argument, Meaning, Ordinary Language Philosophy, Analytic Philosophy, Linguistic Turn, Mysticism
+Wittgenstein > Logical Positivism, J.L. Austin, Gilbert Ryle, Ordinary Language Philosophy, Rorty
+Carnap = Logical Positivism, Verification Principle, Analytic Philosophy, Formal Systems
+Carnap ~ Quine, Metaphysics
+A.J. Ayer = Logical Positivism, Emotivism, Verification Principle, Empiricism
+Gödel = Incompleteness, Formal Systems, Mathematical Platonism, Set Theory
+Gödel = Turing
+Tarski = Truth, Semantics, Formal Systems
+Turing = Computability, Turing Test, Artificial Intelligence, Formal Systems, Functionalism
+Saussure = Structuralism, Semiotics, Meaning, Linguistic Turn
+Saussure > Lévi-Strauss, Structuralism
+Lévi-Strauss = Structuralism, Semiotics
+Lévi-Strauss > Poststructuralism
+J.L. Austin = Speech Acts, Ordinary Language Philosophy, Pragmatics, Perception
+J.L. Austin > Searle
+Grice = Implicature, Pragmatics, Meaning
+Kripke = Rigid Designation, Modal Logic, Possible Worlds, Necessity, A Posteriori, Private Language Argument, Essence
+Kripke ~ Russell
+Chomsky = Innate Ideas, Rationalism, Meaning, Structuralism
+Chomsky ~ Behaviorism, Empiricism
+Derrida = Deconstruction, Differance, Poststructuralism, Postmodernism, Meaning, Speech Acts
+Derrida ~ Structuralism, Searle
+Gadamer = Hermeneutics, Meaning, Continental Philosophy, Truth
+Gadamer ~ Derrida
+Ricoeur = Hermeneutics, Metaphor, Self, Phenomenology, Personal Identity
+Deduction = Validity, Soundness, Syllogism, Formal Systems, Propositional Logic
+Validity = Soundness, Fallacy
+Paradox = Liar Paradox, Russell's Paradox, Sorites Paradox, Zeno's Paradoxes, Vagueness
+Liar Paradox = Truth, Incompleteness, Paraconsistent Logic
+Paraconsistent Logic ~ Law of Non-Contradiction
+Russell's Paradox = Set Theory, Logicism
+Set Theory = Infinity, Mathematical Platonism, Predicate Logic
+Infinity = Zeno's Paradoxes
+Sorites Paradox = Vagueness
+Vagueness = Meaning
+Incompleteness = Formal Systems, Computability
+Incompleteness ~ Logicism
+Formal Systems = Propositional Logic, Predicate Logic, Computability, Mathematical Formalism
+Modal Logic = Necessity, Possible Worlds, Predicate Logic
+Meaning = Reference, Sense and Reference, Semantics, Pragmatics, Verification Principle, Language Games, Speech Acts, Hermeneutics, Semiotics
+Reference = Rigid Designation, Sense and Reference
+Sense and Reference = Semantics
+Speech Acts = Pragmatics, Implicature
+Language Games = Private Language Argument
+Linguistic Turn = Analytic Philosophy, Hermeneutics, Structuralism
+Metaphor = Hermeneutics, Meaning
+Semiotics = Structuralism
+Structuralism > Poststructuralism
+Poststructuralism = Postmodernism, Deconstruction
+Postmodernism ~ Enlightenment
+Postmodernism = Constructivism
+Hermeneutics = Continental Philosophy
+Analytic Philosophy = Logical Positivism, Ordinary Language Philosophy, Linguistic Turn
+Logicism ~ Intuitionism
+Intuitionism ~ Mathematical Platonism
+Mathematical Formalism ~ Mathematical Platonism
+Mathematical Platonism = Universals
+Computability = Artificial Intelligence
+Ordinary Language Philosophy ~ Logical Positivism
+Logical Positivism = Verification Principle, Analytic-Synthetic Distinction, Empiricism, Positivism
+Logical Positivism ~ Metaphysics
+Emotivism ~ Moral Realism
+Emotivism = Logical Positivism, Meta-ethics
+Verification Principle ~ Falsifiability
+Dialectic = Dialectical Materialism
+Law of Non-Contradiction = Being
+
+# ---------- mind ----------
+Consciousness = Qualia, Hard Problem of Consciousness, Intentionality, Self, Introspection, Phenomenology, Emergence, Panpsychism
+Qualia = Philosophical Zombie, Mary's Room, Physicalism
+Mind-Body Problem = Dualism, Physicalism, Functionalism, Mental Causation, Substance
+Hard Problem of Consciousness = Physicalism
+Intentionality = Phenomenology, Mental Causation
+Other Minds = Skepticism
+Chinese Room = Artificial Intelligence, Turing Test
+Artificial Intelligence = Functionalism, Computability, Consciousness
+Self = Personal Identity, Introspection, Anatta
+Extended Mind = Embodied Cognition
+Embodiment = Embodied Cognition
+Lifeworld = Phenomenology
+Epoché = Phenomenology
+Multiple Realizability = Functionalism
+Functionalism ~ Identity Theory
+Behaviorism ~ Introspection
+Epiphenomenalism = Mental Causation, Dualism
+Panpsychism = Monism
+Eliminative Materialism = Materialism
+Property Dualism = Dualism
+Physicalism = Materialism
+Physicalism ~ Dualism
+Identity Theory = Physicalism
+Identity Theory ~ Dualism
+Searle = Chinese Room, Intentionality, Speech Acts, Consciousness, Artificial Intelligence
+Searle ~ Functionalism, Turing Test
+Nagel = Consciousness, Qualia, Moral Luck, Altruism
+Nagel ~ Physicalism
+Chalmers = Hard Problem of Consciousness, Philosophical Zombie, Extended Mind, Panpsychism, Property Dualism, Qualia
+Chalmers ~ Physicalism
+Andy Clark = Extended Mind, Embodied Cognition
+Andy Clark = Chalmers
+Frank Jackson = Mary's Room, Qualia
+Frank Jackson ~ Physicalism
+Dennett = Consciousness, Functionalism, Natural Selection, Physicalism, Free Will, Compatibilism, Self, Intentionality
+Dennett ~ Qualia, Chalmers
+Paul Churchland = Eliminative Materialism, Physicalism
+Paul Churchland ~ Dualism
+Putnam = Functionalism, Multiple Realizability, Brain in a Vat, Scientific Realism, Meaning, Semantics
+Putnam ~ Identity Theory
+Gilbert Ryle = Behaviorism, Ordinary Language Philosophy, Mind-Body Problem, Analytic Philosophy
+Gilbert Ryle ~ Dualism
+Personal Identity = Self, Persistence, Consciousness
+Identity = Personal Identity, Persistence, Essence, Properties, Mereology
+Derek Parfit = Personal Identity, Self, Consequentialism, Persistence, Anatta
+Bergson = Time, Becoming, Process Philosophy, Vitalism, Consciousness
+Bergson > Whitehead, Merleau-Ponty
+
+# ---------- metaphysics ----------
+Being = Existence, Ontology, Nothingness, Becoming, Essence, Substance
+Existence = Existence Precedes Essence, Ontology
+Substance = Essence, Properties, Dualism, Monism
+Causation = Necessity, Time, Laws of Nature, Mental Causation, Problem of Induction, Determinism
+Free Will = Moral Responsibility, Autonomy, Causation
+Determinism ~ Free Will
+Compatibilism = Free Will, Determinism, Moral Responsibility
+Fatalism = Determinism, Time
+Time = Space, Becoming, Persistence
+Possible Worlds = Necessity, Modal Logic, Essence
+Emergence = Consciousness, Reductionism, Mental Causation
+Teleology = Causation, Natural Selection, Vitalism, Explanation
+Mereology = Set Theory, Persistence, Properties
+Principle of Sufficient Reason = Causation, Determinism, God
+Dualism ~ Monism
+Dualism = Mind-Body Problem, Substance
+Materialism = Physicalism, Naturalism
+David Lewis = Possible Worlds, Necessity, Persistence, Properties, Mereology, Causation, Identity
+David Lewis ~ Kripke
+Process Philosophy = Becoming, Time
+
+# ---------- epistemology ----------
+Knowledge = Justified True Belief, Truth, Certainty, Skepticism, Epistemic Justification
+Justified True Belief = Gettier Problem, Epistemic Justification, Truth
+Edmund Gettier = Gettier Problem, Justified True Belief
+Gettier Problem = Reliabilism, Knowledge
+Epistemic Justification = Foundationalism, Coherentism, Reliabilism
+Foundationalism = Certainty, Cogito, Sense Data
+Foundationalism ~ Coherentism
+Reliabilism = Naturalized Epistemology
+Skepticism = Cartesian Doubt, Brain in a Vat, Certainty, Other Minds, Problem of Induction, Perception
+Cartesian Doubt = Cogito, Certainty
+Cogito = Self, Consciousness, Certainty
+Brain in a Vat = Perception
+Perception = Sense Data, Phenomenalism, Consciousness, Phenomena and Noumena, Qualia
+Sense Data = Phenomenalism
+A Priori ~ A Posteriori
+A Priori = Analytic-Synthetic Distinction, Necessity, Innate Ideas
+Innate Ideas ~ Tabula Rasa
+Tabula Rasa = Empiricism
+Truth = Correspondence Theory of Truth, Coherentism, Pragmatism, Semantics, Meaning
+Correspondence Theory of Truth = Scientific Realism
+Perspectivism = Truth, Skepticism, Postmodernism
+Constructivism = Paradigm Shift, Truth
+Problem of Induction = Falsifiability, Bayesianism, Laws of Nature
+Quine = Analytic-Synthetic Distinction, Naturalism, Underdetermination, Naturalized Epistemology, Analytic Philosophy, Meaning, Pragmatism, Ontology, Set Theory
+Quine > Putnam, Rorty
+Quine ~ Logical Positivism
+Butterfly Dream = Cartesian Doubt, Brain in a Vat, Maya
+
+# ---------- ethics ----------
+Utilitarianism = Utility, Consequentialism, Hedonism
+Utilitarianism ~ Deontology
+Deontology = Duty, Categorical Imperative, Kantian Ethics
+Virtue Ethics = Virtue, Eudaimonia, Golden Mean
+Virtue Ethics ~ Consequentialism
+Consequentialism ~ Deontology
+Trolley Problem = Utilitarianism, Deontology, Moral Responsibility
+Egoism ~ Altruism
+Altruism = Care Ethics
+Meta-ethics = Moral Realism, Moral Relativism, Emotivism, Is-Ought Problem, Open Question Argument
+Moral Realism ~ Moral Relativism
+Natural Law = Aquinas, Human Rights, God
+Supererogation = Duty
+Moral Responsibility = Free Will, Moral Luck, Autonomy
+Moral Luck ~ Kantian Ethics
+Good = Eudaimonia
+Contractualism = Social Contract, Justice, Veil of Ignorance
+Justice = Distributive Justice, Equality, Virtue
+Eudaimonia = Virtue, Good
+Value Pluralism = Justice
+Animal Ethics = Utilitarianism
+Divine Command Theory = God, Meta-ethics
+Divine Command Theory ~ Autonomy
+Golden Mean = Virtue
+Open Question Argument = Good
+Good Will = Duty
+Elizabeth Anscombe = Virtue Ethics, Consequentialism, Moral Responsibility, Intentionality
+Elizabeth Anscombe ~ Consequentialism
+Elizabeth Anscombe > Philippa Foot
+Philippa Foot = Virtue Ethics, Trolley Problem, Aristotelianism
+Peter Singer = Utilitarianism, Animal Ethics, Altruism, Consequentialism
+Bernard Williams = Moral Luck, Personal Identity
+Bernard Williams ~ Utilitarianism
+Alasdair MacIntyre = Virtue Ethics, Communitarianism, Aristotelianism, Virtue
+Martha Nussbaum = Virtue Ethics, Stoicism, Justice, Equality, Cosmopolitanism, Feminism
+Carol Gilligan = Care Ethics, Feminism, Justice
+Care Ethics ~ Contractualism
+Care Ethics = Ubuntu
+
+# ---------- political ----------
+Social Contract = State of Nature, Sovereignty, Legitimacy, General Will, Liberty
+State of Nature = Liberty, Equality
+Liberty = Negative and Positive Liberty, Human Rights, Autonomy
+Equality = Justice, Distributive Justice, Human Rights
+Sovereignty = Legitimacy, Power, Democracy
+Property = Liberty, Libertarianism
+Legitimacy = Democracy, Power
+Power = Ideology, Hegemony, Biopower
+Ideology = Hegemony, Alienation
+Alienation = Commodity Fetishism, Surplus Value, Class Struggle
+Class Struggle = Dialectical Materialism
+Civil Disobedience = Justice, Legitimacy, Moral Responsibility
+Human Rights = Natural Law, Cosmopolitanism, Enlightenment
+Totalitarianism = Banality of Evil, Power, Ideology
+Hegemony = Ideology, Power
+Biopower = Power, Panopticon
+General Will = Democracy
+Separation of Powers = Sovereignty
+Public Sphere = Democracy, Legitimacy
+Distributive Justice = Equality
+Tyranny of the Majority = Democracy, Liberty
+Negative and Positive Liberty = Liberalism
+Liberalism ~ Conservatism, Communitarianism
+Liberalism = Liberty, Human Rights, Equality
+Conservatism = Property
+Libertarianism = Liberty, Property, Anarchism
+Republicanism = Liberty, Democracy
+Anarchism ~ Sovereignty, Legitimacy
+Democracy = Equality, Legitimacy
+Feminism = Equality, Power, Care Ethics
+Critical Theory = Ideology, Frankfurt School, Marxism
+Frankfurt School = Critical Theory, Marxism
+Postcolonialism = Hegemony, Power
+Political Realism = Power
+Communitarianism = Ubuntu
+Rawls = Justice, Veil of Ignorance, Distributive Justice, Liberalism, Social Contract, Contractualism, Equality, Liberty
+Rawls ~ Utilitarianism
+Nozick = Libertarianism, Property, Liberty, Distributive Justice
+Nozick ~ Rawls
+Hannah Arendt = Banality of Evil, Totalitarianism, Power, Public Sphere, Liberty, Human Rights, Moral Responsibility
+Adorno = Frankfurt School, Critical Theory, Capitalism, Ideology, Art, Enlightenment
+Adorno = Horkheimer, Walter Benjamin
+Horkheimer = Frankfurt School, Critical Theory, Enlightenment
+Herbert Marcuse = Critical Theory, Frankfurt School, Marxism, Alienation, Capitalism
+Habermas = Critical Theory, Public Sphere, Democracy, Hermeneutics, Frankfurt School, Legitimacy
+Habermas ~ Postmodernism, Foucault
+Foucault = Power, Biopower, Panopticon, Poststructuralism, Postmodernism, Truth, Ideology
+Foucault > Judith Butler, Edward Said
+Gramsci = Hegemony, Marxism, Ideology
+Frantz Fanon = Postcolonialism, The Other, Marxism, Alienation, Existential Phenomenology
+Edward Said = Postcolonialism, Power, Hegemony
+Judith Butler = Feminism, Poststructuralism, Power, Postmodernism, Speech Acts
+Isaiah Berlin = Value Pluralism, Negative and Positive Liberty, Liberalism, Enlightenment
+Han Fei = Machiavelli
+Popper = Totalitarianism, Liberalism, Democracy
+Popper ~ Marxism
+
+# ---------- aesthetics ----------
+Beauty = Taste, Aesthetic Judgment, Formalism, Art, The Sublime
+Taste = Aesthetic Judgment
+Aesthetic Judgment = Disinterestedness, Aesthetic Experience
+Art = Mimesis, Expression Theory, Institutional Theory of Art, Aura, Aestheticism
+Tragedy = Catharsis, Apollonian and Dionysian
+Genius = Romanticism
+Aura = Art, Capitalism
+Aestheticism = Beauty
+Formalism = Beauty
+Expression Theory = Art
+Institutional Theory of Art = Art
+Clive Bell = Formalism, Beauty, Art
+R.G. Collingwood = Expression Theory, Art
+Susanne Langer = Expression Theory, Art, Meaning
+Arthur Danto = Institutional Theory of Art, Art
+Walter Benjamin = Aura, Art, Frankfurt School, Marxism
+Nelson Goodman = Art, Semiotics, Nominalism, Truth
+Aesthetic Experience = Disinterestedness, Consciousness
+The Sublime = Romanticism
+
+# ---------- science & pragmatism ----------
+Popper = Falsifiability, Demarcation Problem, Scientific Method, Problem of Induction
+Popper ~ Logical Positivism, Verification Principle
+Popper > Imre Lakatos
+Thomas Kuhn = Paradigm Shift, Incommensurability, Theory-Ladenness, Underdetermination
+Thomas Kuhn ~ Popper, Scientific Realism
+Thomas Kuhn > Paul Feyerabend, Imre Lakatos
+Imre Lakatos = Scientific Method, Falsifiability
+Paul Feyerabend = Scientific Method, Incommensurability, Theory-Ladenness, Anarchism
+Bas van Fraassen = Constructive Empiricism, Empiricism, Instrumentalism
+Bas van Fraassen ~ Scientific Realism
+Thomas Bayes = Bayesianism, Probability, Confirmation
+Bayesianism = Confirmation, Problem of Induction
+Rorty = Neopragmatism, Pragmatism, Truth, Postmodernism, Hermeneutics
+Rorty ~ Correspondence Theory of Truth, Scientific Realism, Analytic Philosophy
+Neopragmatism = Pragmatism
+Falsifiability = Demarcation Problem, Scientific Method
+Paradigm Shift = Incommensurability, Theory-Ladenness
+Explanation = Laws of Nature, Causation, Reductionism
+Underdetermination = Theory-Ladenness, Scientific Realism
+Scientific Method = Problem of Induction, Empiricism
+Occam's Razor = Explanation
+Laws of Nature = Necessity, Determinism
+Probability = Bayesianism
+Confirmation ~ Falsifiability
+Natural Selection = Teleology, Naturalism
+Anthropic Principle = Teleological Argument, Probability
+Pragmatic Maxim = Pragmatism, Meaning, Verification Principle
+Fallibilism ~ Certainty
+Fallibilism = Pragmatism
+Naturalized Epistemology = Naturalism, Knowledge
+Scientific Realism ~ Instrumentalism, Constructive Empiricism
+Reductionism ~ Emergence
+Naturalism = Materialism, Physicalism
+Pragmatism = Truth, Fallibilism, Pragmatic Maxim, Neopragmatism
+Positivism = Logical Positivism, Empiricism, Scientific Method
+Vitalism ~ Reductionism
+
+# ---------- religion ----------
+God = Theism, Atheism, Agnosticism, Problem of Evil, Ontological Argument, Cosmological Argument, Teleological Argument, Faith, Pantheism, Deism, Transcendence, Immanence
+Theism ~ Atheism
+Agnosticism = Skepticism
+Problem of Evil = Theodicy, Free Will Defense, Atheism
+Theodicy = Free Will Defense, Free Will
+Cosmological Argument = Causation, Principle of Sufficient Reason, Time
+Teleological Argument = Teleology
+Teleological Argument ~ Natural Selection
+Faith = Fideism, Leap of Faith, Pascal's Wager
+Fideism ~ Rationalism
+Pascal's Wager = Probability
+Mysticism = Negative Theology, Transcendence
+Transcendence ~ Immanence
+Pantheism = Immanence, Monism
+Deism = Enlightenment
+Atheism = Naturalism
+
+# ---------- eastern & non-western ----------
+Confucius = Confucianism, Ren, Ritual (Li), Junzi, Filial Piety, Virtue, Virtue Ethics
+Confucius > Mencius, Xunzi
+Mencius = Confucianism, Ren
+Mencius > Wang Yangming
+Mencius ~ Xunzi
+Xunzi = Confucianism, Ritual (Li)
+Xunzi > Han Fei
+Mozi = Mohism, Utilitarianism, Consequentialism, Altruism
+Mohism ~ Confucianism
+Han Fei = Legalism, Power, Political Realism
+Legalism ~ Confucianism
+Laozi = Daoism, Dao, Wu Wei, Yin-Yang, Mysticism
+Laozi > Zhuangzi
+Zhuangzi = Daoism, Butterfly Dream, Wu Wei, Skepticism, Dao
+Daoism ~ Confucianism
+Daoism > Zen
+Neo-Confucianism = Buddhism, Daoism, Confucianism
+Zhu Xi = Neo-Confucianism, Principle (Li)
+Wang Yangming = Neo-Confucianism, Unity of Knowledge and Action, Idealism
+Wang Yangming ~ Zhu Xi
+Wu Wei = Amor Fati, Ataraxia
+Dao = Being
+Unity of Knowledge and Action = Knowledge, Virtue
+Junzi = Virtue Ethics, Virtue
+Ren = Virtue, Care Ethics, Altruism
+Filial Piety = Duty
+Principle (Li) = Essence, Universals
+Buddha = Buddhism, Four Noble Truths, Dependent Origination, Middle Way, Nirvana, Anatta, Karma, Samsara, Dharma
+Buddhism = Madhyamaka, Yogacara, Zen
+Buddhism > Zen
+Middle Way = Golden Mean, Virtue
+Anatta = Self, Personal Identity
+Nagarjuna = Madhyamaka, Sunyata, Middle Way, Dependent Origination, Skepticism, Nothingness
+Madhyamaka > Zen
+Sunyata = Nothingness
+Sunyata ~ Essence, Substance
+Dependent Origination = Causation
+Vasubandhu = Yogacara, Idealism, Consciousness, Buddhism
+Yogacara = Idealism, Consciousness
+Yogacara ~ Madhyamaka
+Dogen = Zen, Zazen, Time, Mindfulness
+Zen = Mindfulness, Zazen, Nothingness
+Nishida Kitaro = Kyoto School, Zen, Pure Experience, Nothingness
+Kyoto School = Nothingness, Phenomenology, Zen, Existentialism
+Mindfulness = Consciousness, Introspection, Buddhism
+Wabi-sabi = Beauty, Zen, Aesthetic Experience
+Shankara = Advaita Vedanta, Brahman, Atman, Maya, Monism, Moksha
+Advaita Vedanta = Monism, Idealism
+Advaita Vedanta ~ Dualism
+Brahman = Atman
+Maya = Idealism, Perception
+Samkhya = Dualism, Substance
+Nyaya = Deduction, Knowledge, Epistemic Justification, Perception
+Charvaka = Materialism, Skepticism, Hedonism, Empiricism
+Charvaka ~ Karma
+Mahavira = Jainism, Ahimsa, Karma, Moksha
+Jainism = Ahimsa, Karma, Moksha, Samsara
+Ahimsa = Altruism
+Karma = Causation, Moral Responsibility, Determinism
+Samsara = Moksha, Nirvana, Eternal Recurrence
+Nirvana = Moksha
+Dharma = Duty, Virtue
+Ubuntu = Communitarianism, Care Ethics, Self
+Pyrrho = Buddhism
+`;
+
+/* ===== GRAPH BUILDER ===== */
+function buildGraph(){
+  const nodes = [], byId = new Map(), missing = [], dupes = [];
+  const add = (id, group, type) => {
+    if (byId.has(id)) { dupes.push(id); return; }
+    const n = {id, group, type}; byId.set(id, n); nodes.push(n);
+  };
+  add("Philosophy", "R", "root");
+  for (const g of ORDER) add(FIELD_NAMES[g], g, "field");
+  for (const g of ORDER) for (const type of ["concept","school","thinker"])
+    for (const name of NODES[g][type].split("|")) add(name, g, type);
+
+  const links = [], seen = new Set();
+  const addLink = (a, b, rel) => {
+    if (a === b) return;
+    if (!byId.has(a)) { missing.push(a); return; }
+    if (!byId.has(b)) { missing.push(b); return; }
+    const key = rel === "infl" ? a+"|"+b+"|"+rel : [a,b].sort().join("|")+"|"+rel;
+    if (seen.has(key)) return;
+    seen.add(key);
+    links.push({source:a, target:b, rel});
+  };
+  for (const g of ORDER) addLink("Philosophy", FIELD_NAMES[g], "part");
+  for (const n of nodes) if (n.type === "concept" || n.type === "school") addLink(FIELD_NAMES[n.group], n.id, "part");
+
+  const RE = /^(.+?)\s+([>=~])\s+(.+)$/;
+  for (let line of EDGES.split("\n")) {
+    line = line.trim();
+    if (!line || line[0] === "#") continue;
+    const m = RE.exec(line);
+    if (!m) { missing.push("BAD LINE: " + line); continue; }
+    const rel = m[2] === ">" ? "infl" : m[2] === "~" ? "opp" : "rel";
+    const src = m[1].trim();
+    for (const t of m[3].split(",")) addLink(src, t.trim(), rel);
+  }
+  return {nodes, links, missing, dupes};
+}
+
+/* ===== DESCRIPTIONS ===== */
+const DESC_TEXT = `
+Being: What it is for anything to exist at all; the central subject of ontology.
+Existence: The fact that something is, as opposed to what it is.
+Substance: The underlying thing that has properties and persists through change.
+Causation: The relation by which one event or thing brings about another.
+Free Will: The capacity to choose among real alternatives rather than being fully determined.
+Determinism: The view that every event is fixed by prior causes and natural laws.
+Time: Whether time flows, whether the past and future exist, and what change really is.
+Space: Whether space is a container, a set of relations, or a feature of how we experience.
+Identity: What makes a thing one and the same thing, across differences and across time.
+Personal Identity: What makes you the same person from one moment, or decade, to the next.
+Universals: Properties, like redness, that many different things seem to share.
+Forms: Plato's perfect, unchanging patterns of which physical things are imperfect copies.
+Essence: What a thing must have in order to be the kind of thing it is.
+Possible Worlds: Ways things could have gone, used to analyze what is possible and necessary.
+Necessity: What could not have been otherwise, as opposed to what merely happens to be so.
+Nothingness: Absence or non-being, and whether it can be meaningfully discussed at all.
+Becoming: The process of change and coming-to-be, contrasted with fixed being.
+Mereology: The logic of parts and wholes.
+Emergence: New properties arising in complex systems that their parts do not have alone.
+Properties: The features or qualities things have, such as shape, color or mass.
+Fatalism: The view that what will happen is fixed no matter what we do.
+Persistence: How an object can last through time while changing.
+Ontology: The study of what kinds of things exist and how they are categorized.
+Teleology: Explaining things by their purpose or end rather than only by prior causes.
+Principle of Sufficient Reason: Nothing is without a reason or explanation for why it is so.
+Materialism: Everything that exists is matter, or depends on matter.
+Idealism: Reality is fundamentally mental, or dependent on minds.
+Dualism: Mind and matter are two fundamentally different kinds of thing.
+Monism: Reality is ultimately one kind of thing, or one substance.
+Nominalism: Only individual things exist; universals are just names or concepts.
+Compatibilism: Free will and determinism can both be true together.
+Atomism: Everything is made of indivisible particles moving in a void.
+Platonism: Abstract objects, especially the Forms, exist independently of the physical world.
+Aristotelianism: A tradition built on Aristotle's ideas about substance, causes, purpose and virtue.
+Neoplatonism: Late-antique Platonism in which all reality flows from a single ineffable One.
+Pre-Socratics: The earliest Greek thinkers, who sought a natural first principle behind all things.
+Scholasticism: The medieval method of reconciling Aristotle with Christian, Jewish and Islamic theology.
+Process Philosophy: Reality is made of events and becoming rather than fixed things.
+German Idealism: The movement of Kant's successors, Fichte, Schelling and Hegel, built around mind and freedom.
+Hegelianism: Hegel's view that history and thought unfold through conflict toward greater freedom.
+Thales: Greek thinker who proposed that everything comes from water; often called the first philosopher.
+Heraclitus: Presocratic who held that everything flows and that opposites are unified.
+Parmenides: Argued that change is an illusion and that what is, is one and unchanging.
+Zeno of Elea: Devised paradoxes of motion to defend Parmenides' claim that change is impossible.
+Democritus: Proposed that the world consists of atoms and void.
+Pythagoras: Teacher who saw number and harmony as the basis of reality.
+Plato: Socrates' student; founded the Academy and argued for eternal Forms.
+Aristotle: Plato's student who founded logic and biology and shaped ethics and metaphysics.
+Plotinus: Founder of Neoplatonism, who traced all reality to a single divine One.
+Spinoza: Rationalist who identified God with nature and argued that everything follows necessarily.
+Leibniz: Rationalist who pictured reality as simple monads and this world as the best possible.
+Bergson: French philosopher who distinguished lived time from clock time.
+Whitehead: Mathematician turned metaphysician who co-wrote Principia Mathematica and founded process philosophy.
+David Lewis: Defended the reality of many concrete possible worlds.
+Hegel: German idealist who saw history as the development of spirit through dialectic.
+Fichte: Kant's successor who made the free, self-positing self the basis of philosophy.
+Schelling: German idealist who sought a unity of nature and spirit.
+Duns Scotus: Medieval scholastic known for his views on the univocity of being and on free will.
+Boethius: Roman statesman whose Consolation of Philosophy reconciled fate, foreknowledge and free will.
+Knowledge: What we know as opposed to merely believe, and what that requires.
+Justified True Belief: The classical definition of knowledge as belief that is true and well supported.
+Gettier Problem: Cases where a justified true belief seems true only by luck, and so is not knowledge.
+Skepticism: The challenge that we may not really know what we think we know.
+Truth: What makes a claim correct, and whether it depends on the world, coherence or usefulness.
+Perception: How the senses give us access to the world, and how reliable that access is.
+Innate Ideas: Ideas or knowledge present in the mind from birth rather than learned.
+Certainty: Complete freedom from doubt, and whether anything can meet that standard.
+Cartesian Doubt: Descartes' method of doubting everything that could possibly be false.
+Cogito: Descartes' "I think, therefore I am", the one thing he found could not be doubted.
+Tabula Rasa: Locke's idea that the mind starts as a blank slate written on by experience.
+A Priori: Knowledge that can be had independently of experience, like mathematics.
+A Posteriori: Knowledge that depends on experience and observation.
+Analytic-Synthetic Distinction: Whether some truths hold merely by meaning, as opposed to by how the world is.
+Problem of Induction: Why past observations should justify beliefs about the unobserved future.
+Epistemic Justification: What makes a belief rationally supported rather than a lucky guess.
+Sense Data: The immediate contents of experience, such as color patches, thought to lie between us and objects.
+Phenomena and Noumena: Kant's split between things as they appear to us and things as they are in themselves.
+Brain in a Vat: A thought experiment where you may be a disembodied brain fed illusions, testing skepticism.
+Perspectivism: Nietzsche's view that all knowing is from some perspective; there is no view from nowhere.
+Correspondence Theory of Truth: A statement is true when it matches the way the world is.
+Rationalism: Reason, not sense experience, is the main source of knowledge.
+Empiricism: All knowledge ultimately comes from sense experience.
+Foundationalism: Knowledge rests on basic beliefs that need no further support.
+Coherentism: Beliefs are justified by fitting together in a mutually supporting web.
+Reliabilism: A belief counts as knowledge if it is produced by a reliable process.
+Pyrrhonism: Ancient skepticism that suspends judgment in order to reach tranquility.
+Transcendental Idealism: Kant's view that space, time and causality are structures our minds impose on experience.
+Phenomenalism: Physical objects are just patterns of actual and possible experiences.
+Constructivism: Knowledge and reality are built by social, cultural or mental processes.
+Descartes: Father of modern philosophy; built knowledge on "I think, therefore I am" and split mind from body.
+Locke: Empiricist and liberal theorist who argued the mind begins blank and government rests on consent.
+Berkeley: Irish bishop who argued that to be is to be perceived.
+Hume: Scottish empiricist who questioned causation, the self and the basis of morals.
+Kant: Argued that the mind structures experience and that morality rests on universal duty.
+Pyrrho: Founder of Greek skepticism, who advised suspending judgment on everything.
+Sextus Empiricus: Ancient physician whose writings preserved and systematized Pyrrhonian skepticism.
+Francis Bacon: Champion of experiment and the inductive method in the new science.
+Edmund Gettier: Author of a short 1963 paper that overturned the classical definition of knowledge.
+Quine: American logician who attacked the analytic-synthetic divide and defended naturalized epistemology.
+Virtue: A trait of character, like courage or honesty, that makes a person excellent.
+Eudaimonia: Aristotle's term for flourishing: living well and fulfilling one's nature.
+Categorical Imperative: Kant's rule: act only on principles you could will as universal law.
+Good: What is valuable or worth pursuing, and whether goodness is a real property.
+Duty: An obligation to act a certain way regardless of desire or outcome.
+Justice: Giving people what they are due, in dealings and in the design of institutions.
+Autonomy: Governing oneself by reasons one gives oneself.
+Moral Luck: The puzzle that we are judged for outcomes partly outside our control.
+Trolley Problem: A dilemma about whether to divert a runaway trolley to kill one and save five.
+Egoism: The view that self-interest is, or should be, the aim of action.
+Altruism: Acting for the benefit of others, possibly at cost to oneself.
+Is-Ought Problem: Hume's point that facts alone do not entail moral conclusions.
+Natural Law: Moral law grounded in human nature or reason and binding everywhere.
+Moral Responsibility: When someone deserves praise or blame for what they do.
+Utility: Benefit or well-being, the quantity utilitarians want to maximize.
+Golden Mean: Aristotle's idea that virtue lies between excess and deficiency.
+Open Question Argument: Moore's argument that "good" cannot be defined in natural terms.
+Animal Ethics: What moral consideration we owe to nonhuman animals.
+Ataraxia: Calm freedom from disturbance, prized by Epicureans, Stoics and skeptics.
+Good Will: For Kant, the only thing good without qualification: acting from duty.
+Supererogation: Good acts beyond duty; admirable but not required.
+Value Pluralism: There are many real, sometimes conflicting values that cannot be reduced to one.
+Utilitarianism: The right act produces the greatest happiness for the greatest number.
+Deontology: Morality consists of duties and rights that hold regardless of consequences.
+Virtue Ethics: Ethics is about developing good character, not just following rules or counting outcomes.
+Consequentialism: The rightness of an act depends only on its outcomes.
+Care Ethics: Morality centers on relationships, attentiveness and responsiveness to need.
+Contractualism: Moral rules are those we could all agree on, or that no one could reasonably reject.
+Emotivism: Moral statements express feelings or attitudes rather than facts.
+Stoicism: Live by reason and virtue, accepting what is beyond your control.
+Epicureanism: Pursue modest pleasure and freedom from fear as the good life.
+Cynicism: Ancient school that rejected convention and possessions to live according to nature.
+Kantian Ethics: Morality is grounded in rational duty and respect for persons as ends in themselves.
+Hedonism: Pleasure is the only intrinsic good.
+Meta-ethics: The study of what moral claims mean and whether they can be true.
+Moral Realism: There are objective moral facts independent of what anyone thinks.
+Moral Relativism: Moral truth varies with culture or individual, with no universal standard.
+Socrates: Athenian who questioned everyone about virtue and left no writings; executed in 399 BCE.
+Epicurus: Taught that the good life is simple pleasure and freedom from fear of gods and death.
+Lucretius: Roman poet who set out Epicurean atomism in On the Nature of Things.
+Zeno of Citium: Founded Stoicism in Athens around 300 BCE.
+Epictetus: Former slave turned Stoic teacher who stressed what is and is not up to us.
+Marcus Aurelius: Roman emperor whose Meditations record Stoic self-discipline.
+Seneca: Roman statesman and Stoic who wrote letters on anger, death and time.
+Diogenes: Cynic who lived in a jar and mocked social convention.
+Bentham: Founder of utilitarianism, who measured actions by pleasure and pain.
+John Stuart Mill: Refined utilitarianism and defended individual liberty and women's equality.
+G.E. Moore: British philosopher who argued that goodness is simple and indefinable.
+Elizabeth Anscombe: Argued modern moral philosophy had lost its foundations and helped revive virtue ethics.
+Philippa Foot: Virtue ethicist who introduced the trolley problem.
+Peter Singer: Utilitarian who argued for animal liberation and for duties to give to the poor.
+Derek Parfit: Argued personal identity matters less than we think and reasoned about future generations.
+Martha Nussbaum: Developed the capabilities approach and defended the role of emotion in ethics.
+Bernard Williams: Critic of utilitarianism who coined the idea of moral luck.
+Alasdair MacIntyre: Argued for reviving virtue ethics within communities and traditions.
+Emmanuel Levinas: Held that ethics begins in the face-to-face demand of the Other.
+Carol Gilligan: Psychologist whose work helped found the ethics of care.
+Social Contract: Political authority is legitimate because free people agree to it.
+State of Nature: Imagined life before government, used to show why states exist.
+Liberty: Freedom from interference, or the power to shape one's own life.
+Equality: The idea that people deserve equal standing, rights or treatment.
+Sovereignty: Supreme authority within a territory.
+Property: Rights to own and control things, and where they come from.
+Legitimacy: What makes political power rightful rather than mere force.
+Power: The ability to shape others' actions or beliefs, in many forms.
+Ideology: A system of ideas that shapes how people see society, often serving some interests.
+Alienation: Marx's term for estrangement from one's work, products, others and self under capitalism.
+Class Struggle: The conflict between economic classes that Marx saw as driving history.
+Veil of Ignorance: Rawls' device: choose society's rules without knowing your own place in it.
+Civil Disobedience: Public, nonviolent law-breaking to protest injustice.
+Human Rights: Rights held by every person simply because they are human.
+Totalitarianism: Regimes that seek total control over public and private life.
+Cosmopolitanism: All people belong to one moral community, beyond nations.
+Hegemony: Domination maintained through consent and cultural leadership, not just force.
+Biopower: Foucault's term for power that manages bodies, health and populations.
+General Will: Rousseau's collective will aimed at the common good.
+Separation of Powers: Dividing government into branches to prevent tyranny.
+Panopticon: Bentham's prison design where constant possible observation produces self-discipline.
+Banality of Evil: Arendt's idea that great evil can be done by ordinary people who do not think.
+Public Sphere: The space where citizens debate matters of common concern.
+Distributive Justice: How benefits and burdens should be shared in society.
+Tyranny of the Majority: The danger that democratic majorities oppress minorities.
+Negative and Positive Liberty: Berlin's distinction between freedom from interference and freedom to self-realize.
+Surplus Value: Marx's term for the value workers create beyond their wages, kept by owners.
+Commodity Fetishism: Treating social relations between people as if they were relations between things.
+Dialectical Materialism: The Marxist view that material conditions and their contradictions drive historical change.
+Master-Slave Dialectic: Hegel's account of how self-consciousness arises through a struggle for recognition.
+Liberalism: Prioritizes individual liberty, rights and limited government.
+Conservatism: Values tradition, gradual change and established institutions.
+Marxism: Analyzes history and society through class, labor and economic structures.
+Communism: A classless, stateless society with common ownership.
+Capitalism: An economy of private ownership, markets and profit.
+Libertarianism: A minimal state with maximal individual freedom and property rights.
+Republicanism: Freedom means not being dominated; government by citizens for the common good.
+Anarchism: Rejects the state and hierarchy as illegitimate.
+Democracy: Rule by the people, directly or through representatives.
+Communitarianism: Stresses the role of community and shared values in shaping individuals.
+Feminism: Analyzes and challenges gender inequality and its roots.
+Critical Theory: Analyzes society to expose domination and enable emancipation.
+Frankfurt School: German Marxist thinkers who developed critical theory of culture and capitalism.
+Postcolonialism: Studies the legacy of empire and how colonized peoples are represented.
+Enlightenment: Eighteenth-century movement championing reason, science and human rights.
+Political Realism: Politics is driven by power and interests more than by moral ideals.
+Machiavelli: Florentine who described how rulers gain and hold power, apart from conventional morality.
+Hobbes: Argued that without a strong sovereign, life is "nasty, brutish and short."
+Rousseau: Genevan who argued that people are born free and that the general will should rule.
+Montesquieu: French thinker who proposed separating governmental powers.
+Voltaire: Enlightenment writer who fought for tolerance and satirized easy optimism about evil.
+Mary Wollstonecraft: Early feminist who argued that women's apparent inferiority stems from poor education.
+Adam Smith: Scottish moral philosopher and founder of modern economics.
+Marx: Analyzed capitalism and history through class struggle and labor.
+Engels: Marx's collaborator who helped develop dialectical materialism.
+Tocqueville: French observer of American democracy who warned of majority tyranny.
+Mikhail Bakunin: Russian anarchist who opposed both the state and Marx's authoritarian leanings.
+Rawls: Argued that justice is fairness, chosen behind a veil of ignorance.
+Nozick: Defended a minimal state and individual rights against redistribution.
+Hannah Arendt: Analyzed totalitarianism, public action and the banality of evil.
+Adorno: Frankfurt School critic of mass culture and the Enlightenment's dark side.
+Horkheimer: Frankfurt School founder who coined the term "critical theory".
+Herbert Marcuse: Critic of consumer society and an inspiration for the 1960s New Left.
+Habermas: Theorist of communicative reason and the public sphere.
+Foucault: Traced how power, knowledge and institutions shape subjects.
+Gramsci: Italian Marxist who developed the idea of cultural hegemony.
+Frantz Fanon: Psychiatrist and theorist of colonial violence and decolonization.
+Edward Said: Critic who showed how Western scholarship constructed an exoticized "Orient".
+Judith Butler: Argued that gender is performed rather than natural.
+Isaiah Berlin: Liberal historian of ideas who defended value pluralism and negative liberty.
+Beauty: What pleases the senses or mind; whether it lies in objects or in the beholder.
+The Sublime: Awe before vast or powerful things that overwhelm us yet exalt us.
+Taste: Our capacity to judge what is beautiful or artistically good.
+Art: Human-made works valued for expression, form or meaning; notoriously hard to define.
+Mimesis: Art as imitation or representation of reality.
+Catharsis: Emotional purging or release, especially through tragedy.
+Aesthetic Judgment: Judging something as beautiful, with a claim that others should agree.
+Disinterestedness: Kant's idea that aesthetic pleasure is free from desire or use.
+Genius: Rare originality that gives rules to art rather than following them.
+Tragedy: Drama of suffering and downfall that provokes pity and fear.
+Apollonian and Dionysian: Nietzsche's pair: order and form versus ecstasy and chaos in art.
+Aura: Benjamin's term for the unique presence of an original artwork, lost in reproduction.
+Aesthetic Experience: The distinctive attention and feeling we bring to art and nature.
+Formalism: Art's value lies in its form, not its subject or message.
+Romanticism: Prizes emotion, imagination, nature and individual genius.
+Institutional Theory of Art: Something is art if the artworld treats it as such.
+Expression Theory: Art is the expression and clarification of emotion.
+Aestheticism: "Art for art's sake": beauty is the highest value.
+Alexander Baumgarten: Coined the term "aesthetics" and made it a discipline.
+Friedrich Schiller: Poet-philosopher who argued that play and beauty educate humanity toward freedom.
+Edmund Burke: Linked the sublime to terror and beauty to love; also a founder of conservatism.
+Longinus: Ancient critic to whom the treatise On the Sublime is attributed.
+Arthur Danto: Asked what makes an ordinary object an artwork and declared "the end of art".
+Walter Benjamin: Wrote on art in the age of mechanical reproduction.
+R.G. Collingwood: Argued that art expresses and clarifies emotion.
+Nelson Goodman: Analyzed art as symbol systems and asked "when is art?".
+Susanne Langer: Saw art as symbolic forms of feeling.
+Clive Bell: Argued that "significant form" defines art.
+Deduction: Reasoning where conclusions follow necessarily from premises.
+Validity: An argument is valid when its conclusion follows from its premises.
+Soundness: A valid argument with true premises.
+Syllogism: Aristotle's three-step argument form, like "All men are mortal...".
+Paradox: A seemingly sound argument that leads to a contradiction or absurd conclusion.
+Liar Paradox: "This sentence is false": true if and only if false.
+Russell's Paradox: The set of all sets not containing themselves, which cannot coherently exist.
+Sorites Paradox: One grain is not a heap, and adding one never makes a heap; yet heaps exist.
+Zeno's Paradoxes: Arguments that motion is impossible, such as Achilles never catching the tortoise.
+Incompleteness: Gödel's proof that any rich consistent system has true statements it cannot prove.
+Fallacy: A flaw in reasoning that makes an argument unsound or misleading.
+Dialectic: A method of reasoning through opposing views toward a fuller truth.
+Law of Non-Contradiction: Nothing can be both true and false in the same respect.
+Infinity: Endlessness, and the strange sizes of infinite collections.
+Set Theory: The mathematical theory of collections, a foundation for mathematics.
+Propositional Logic: The logic of whole statements combined by "and", "or", "not" and "if".
+Predicate Logic: Logic that adds quantifiers like "all" and "some" and reasons about objects.
+Modal Logic: The logic of necessity and possibility.
+Formal Systems: Sets of symbols and rules for deriving theorems mechanically.
+Computability: What can be calculated by an algorithm, and the limits of computation.
+Paraconsistent Logic: Logics that tolerate contradictions without collapsing into triviality.
+Meaning: What words and sentences convey, and how they do so.
+Reference: How words pick out things in the world.
+Sense and Reference: Frege's distinction between what a term denotes and how it presents it.
+Speech Acts: Using language to do things: promise, warn, name, command.
+Language Games: Wittgenstein's idea that meaning comes from use within shared activities.
+Private Language Argument: Wittgenstein's argument that a language only one person could understand is impossible.
+Semantics: The study of meaning and truth conditions.
+Pragmatics: How context shapes what speakers mean.
+Linguistic Turn: The twentieth-century shift toward treating philosophical problems as problems about language.
+Verification Principle: A statement is meaningful only if it can be verified by experience or is true by definition.
+Rigid Designation: A name that refers to the same thing in every possible world.
+Differance: Derrida's coinage: meaning arises by difference and endless deferral.
+Semiotics: The study of signs and how they generate meaning.
+Metaphor: Understanding one thing in terms of another; central to thought and language.
+Vagueness: Terms with blurry boundaries, like "bald" or "tall".
+Implicature: What a speaker suggests beyond what is literally said.
+Analytic Philosophy: Tradition emphasizing clarity, logic and careful argument about language and concepts.
+Continental Philosophy: Broad European tradition around phenomenology, existentialism, hermeneutics and critical theory.
+Logical Positivism: The Vienna Circle view that only verifiable or logical statements are meaningful.
+Logicism: Mathematics can be reduced to logic.
+Intuitionism: Mathematical truths are mental constructions; unprovable statements are not automatically true or false.
+Mathematical Platonism: Mathematical objects exist independently of us.
+Mathematical Formalism: Mathematics is the manipulation of symbols by rules.
+Ordinary Language Philosophy: Philosophical puzzles come from misusing everyday words, so study their ordinary use.
+Structuralism: Meaning comes from relations within systems, such as language or myth.
+Poststructuralism: Questions the stability of the structures and meanings that structuralism assumed.
+Postmodernism: Skepticism toward grand narratives, objective truth and fixed identities.
+Deconstruction: Reading texts to show how they undermine their own claims and hierarchies.
+Hermeneutics: The theory of interpretation, of texts and of human life.
+Frege: Founded modern logic and distinguished sense from reference.
+Russell: British logician and public intellectual who found the paradox that broke naive set theory.
+Wittgenstein: Austrian philosopher who dissolved philosophical problems as confusions of language.
+Carnap: Vienna Circle leader who sought a logical construction of science.
+Gödel: Logician who proved the incompleteness theorems.
+Tarski: Logician who gave a formal definition of truth.
+Saussure: Swiss linguist who founded structural linguistics.
+J.L. Austin: British philosopher who showed how speaking is a form of doing.
+Kripke: Reshaped modal logic and argued for necessary a posteriori truths.
+Chomsky: Linguist who argued for an innate universal grammar.
+Derrida: French founder of deconstruction.
+Grice: Explained how conversation relies on implicit cooperative norms.
+A.J. Ayer: Popularized logical positivism in Language, Truth and Logic.
+Gadamer: Hermeneutic philosopher who saw understanding as a fusion of horizons.
+Lévi-Strauss: Anthropologist who applied structuralism to kinship and myth.
+George Boole: Invented the algebraic logic that underlies computing.
+Turing: Founded computer science and asked whether machines can think.
+Ricoeur: French hermeneutic philosopher of narrative, metaphor and selfhood.
+Consciousness: Subjective awareness; what it is like to experience anything.
+Qualia: The felt qualities of experience, like the redness of red.
+Mind-Body Problem: How mental states relate to the physical brain and body.
+Hard Problem of Consciousness: Why physical processing gives rise to subjective experience at all.
+Intentionality: The way mental states are about, or directed at, things.
+Other Minds: How we can know that other beings have minds at all.
+Chinese Room: Searle's argument that running a program is not the same as understanding.
+Artificial Intelligence: Machines performing tasks that require intelligence, and whether they could truly think.
+Self: The subject of experience: what it is, and whether it exists at all.
+Philosophical Zombie: A being physically identical to you but with no inner experience.
+Mental Causation: How thoughts and feelings can cause physical action.
+Extended Mind: The mind can stretch into tools and environment, like notebooks or phones.
+Introspection: Observing one's own mental states, and how reliable that is.
+Mary's Room: Jackson's thought experiment about a scientist who knows every physical fact about color but has never seen it.
+Turing Test: A machine passes if it can converse indistinguishably from a human.
+Multiple Realizability: The same mental state could be realized in different physical systems.
+Embodiment: Thought and experience shaped by having a living body.
+Lifeworld: Husserl's term for the pre-scientific world of everyday experience.
+Epoché: Suspending judgment about the external world in order to study experience itself.
+Functionalism: Mental states are defined by what they do, not by what they are made of.
+Physicalism: Everything, including mind, is physical.
+Behaviorism: Psychology should study observable behavior, not inner states.
+Epiphenomenalism: Mental events are byproducts of brain activity that cause nothing themselves.
+Panpsychism: Mind or experience is a basic feature of all matter.
+Eliminative Materialism: Everyday mental concepts are outdated and will be replaced by neuroscience.
+Embodied Cognition: Thinking depends on the body and its interaction with the world.
+Phenomenology: Careful study of experience as it appears from the first-person view.
+Identity Theory: Mental states are identical with brain states.
+Property Dualism: One substance, the brain, has both physical and irreducibly mental properties.
+Husserl: Founded phenomenology, the study of conscious experience.
+Franz Brentano: Revived the concept of intentionality as the mark of the mental.
+Merleau-Ponty: French phenomenologist who put the lived body at the center of perception.
+Searle: Philosopher of mind and language who devised the Chinese Room.
+Nagel: Asked "What is it like to be a bat?" to argue that subjectivity resists reduction.
+Chalmers: Named the hard problem of consciousness.
+Dennett: Argued that consciousness is a product of evolved brain processes, not a mystery.
+Putnam: Developed functionalism and the brain-in-a-vat argument, later rejecting parts of both.
+Gilbert Ryle: Attacked the "ghost in the machine" picture of the mind.
+Paul Churchland: Champion of eliminative materialism.
+Frank Jackson: Devised the Mary's Room argument.
+Andy Clark: Argued with Chalmers that the mind extends beyond the skull.
+Falsifiability: A theory is scientific only if some observation could show it wrong.
+Paradigm Shift: A revolutionary change in the basic framework of a science.
+Explanation: What makes something understood in science: causes, laws or mechanisms.
+Underdetermination: Evidence can fit more than one theory equally well.
+Scientific Method: The systematic use of observation, hypothesis and testing.
+Occam's Razor: Prefer the simplest explanation that fits the facts.
+Laws of Nature: Regularities that describe or govern how the world behaves.
+Probability: Measures of chance or degrees of belief.
+Theory-Ladenness: Observations are shaped by the theories the observer holds.
+Demarcation Problem: How to tell science from pseudoscience.
+Incommensurability: Successive paradigms cannot be neatly compared by a shared standard.
+Confirmation: How evidence supports a hypothesis.
+Natural Selection: Darwin's mechanism of evolution, which explains design without a designer.
+Anthropic Principle: The universe must permit observers, since we observe it.
+Pragmatic Maxim: Peirce's rule: the meaning of a concept is its practical effects.
+Fallibilism: Any belief, however well supported, could turn out to be false.
+Naturalized Epistemology: Study knowledge as a natural process, using the methods of science.
+Scientific Realism: Successful theories are approximately true, even about unobservable things.
+Instrumentalism: Theories are tools for prediction, not literal descriptions of reality.
+Reductionism: Complex phenomena can be explained by simpler underlying parts.
+Naturalism: Only natural things and the methods of science are needed to explain the world.
+Pragmatism: Truth and meaning are tied to practical consequences and inquiry.
+Bayesianism: Rational belief is degrees of confidence updated by Bayes' rule.
+Constructive Empiricism: Science aims at empirical adequacy, not truth about unobservables.
+Vitalism: Living things have a special life force beyond physics and chemistry.
+Neopragmatism: Rorty's update: drop the search for mirroring reality; value solidarity and conversation.
+Positivism: Only knowledge from observation and science is legitimate.
+Galileo: Founded modern physics with experiment and mathematics; condemned by the Church.
+Auguste Comte: Founded positivism and sociology.
+Peirce: Founded pragmatism and the theory of signs.
+William James: Brought pragmatism to a wide audience and studied religious experience.
+John Dewey: Pragmatist who tied education, democracy and inquiry together.
+Popper: Proposed falsifiability and defended the open society.
+Thomas Kuhn: Introduced paradigm shifts in The Structure of Scientific Revolutions.
+Imre Lakatos: Proposed research programmes as the unit of scientific progress.
+Paul Feyerabend: Argued that science has no single method: "anything goes".
+Bas van Fraassen: Defended constructive empiricism.
+Thomas Bayes: Eighteenth-century minister whose theorem underlies Bayesian inference.
+William of Ockham: Medieval Franciscan behind the principle of parsimony.
+Charles Darwin: Proposed evolution by natural selection.
+Rorty: Neopragmatist who argued that philosophy cannot mirror nature.
+God: The supreme being of theistic religions and the subject of natural theology.
+Problem of Evil: How an all-good, all-powerful God can allow suffering.
+Ontological Argument: Argues that God's existence follows from the very idea of a perfect being.
+Cosmological Argument: Argues that the universe requires a first cause or sufficient reason.
+Teleological Argument: Argues that the order and design of nature point to a designer.
+Faith: Trust or commitment, especially without or beyond proof.
+Pascal's Wager: Betting on God is rational, since the possible gain outweighs the cost.
+Theodicy: Attempts to justify God's goodness despite evil.
+Free Will Defense: Evil results from free choice, which is itself a great good.
+Mysticism: Direct experience of the divine or ultimate reality.
+Negative Theology: Describing God only by what God is not.
+Transcendence: Being beyond the ordinary world and its limits.
+Immanence: Being present within the world.
+Divine Command Theory: Moral rightness is whatever God commands.
+Death: Mortality as a source of meaning, fear or freedom.
+Meaning of Life: Whether life has a purpose, and where it would come from.
+The Absurd: The clash between our search for meaning and a silent universe.
+Anxiety: For existentialists, the mood that reveals our freedom and the nothingness around it.
+Existential Freedom: We are radically free to choose and responsible for our choices.
+Bad Faith: Sartre's term for self-deception that denies one's own freedom.
+Authenticity: Living in accord with one's own choices rather than social roles.
+Existence Precedes Essence: Sartre: we exist first, then define ourselves by what we do.
+Dasein: Heidegger's term for human being: the being who asks about being.
+Thrownness: Being placed into a world and situation we did not choose.
+Being-toward-Death: Heidegger: awareness of mortality shapes an authentic life.
+Eternal Recurrence: Nietzsche's test: could you will your life repeating forever?
+Will to Power: Nietzsche's idea of a drive to grow, create and overcome.
+Übermensch: Nietzsche's "overman": one who creates new values.
+Amor Fati: Love of fate: embracing everything that happens.
+Death of God: Nietzsche's claim that belief in God has collapsed, leaving a crisis of values.
+Master-Slave Morality: Nietzsche's contrast between values of strength and values born of resentment.
+Ressentiment: Resentful envy that reshapes values to devalue the strong.
+Nihilism: The view that life, morality or values lack objective meaning.
+Leap of Faith: Kierkegaard: commitment to God beyond what reason can justify.
+The Other: Another person as a separate consciousness who challenges and defines the self.
+The Gaze: Sartre's idea that being seen turns us into objects for others.
+I-Thou: Buber's mode of full mutual encounter, as opposed to treating things as objects.
+Existentialism: Existence, freedom and responsibility come before any fixed human nature.
+Existential Phenomenology: Studies lived human existence using phenomenological description.
+Absurdism: Life has no inherent meaning; live fully anyway, in revolt.
+Pessimism: Suffering outweighs happiness and existence is fundamentally bad.
+Theism: Belief in a personal God who acts in the world.
+Atheism: Denial that any god exists.
+Agnosticism: Suspending belief because God's existence cannot be known.
+Pantheism: God is identical with the universe.
+Deism: God created the world but does not intervene in it.
+Fideism: Faith does not need, or is opposed to, reason.
+Islamic Philosophy: Medieval Arabic thought that preserved and extended Greek philosophy.
+Augustine: Christian thinker of grace, time, the will and the origin of evil.
+Anselm: Archbishop who devised the ontological argument.
+Aquinas: Scholastic who fused Aristotle with Christian theology and gave five proofs of God.
+Avicenna: Persian polymath who distinguished essence from existence.
+Averroes: Andalusian commentator who made Aristotle central to Islamic and Latin thought.
+Al-Ghazali: Islamic theologian who attacked philosophers' claims about causation and eternity.
+Maimonides: Jewish rabbi and philosopher who reconciled Aristotle with Torah.
+Meister Eckhart: German mystic who spoke of the God beyond God.
+Pascal: French mathematician who argued for faith, famously through his wager.
+Kierkegaard: Danish thinker who stressed individual faith and existential choice.
+Nietzsche: German thinker who announced the death of God and called for revaluing values.
+Schopenhauer: Saw reality as blind will and life as suffering, relieved by art and compassion.
+Heidegger: Asked the question of being through human existence.
+Sartre: French existentialist who taught radical freedom and responsibility.
+Simone de Beauvoir: Existentialist who wrote The Second Sex, arguing "one is not born a woman".
+Camus: French writer who explored the absurd and revolt.
+Dostoevsky: Russian novelist who dramatized faith, doubt, freedom and guilt.
+Karl Jaspers: German existentialist psychiatrist who wrote of limit situations.
+Martin Buber: Jewish philosopher of dialogue and I-Thou relations.
+Dao: The Way: the natural, ineffable course of things.
+Wu Wei: Effortless action in accord with the Dao.
+Yin-Yang: Complementary opposites whose interplay makes the world.
+Ren: Confucian benevolence or humaneness, the chief virtue.
+Ritual (Li): Confucian rites and propriety that shape a moral community.
+Principle (Li): The Neo-Confucian pattern or principle that structures things.
+Junzi: The exemplary person in Confucianism.
+Filial Piety: Respect and care for parents and ancestors.
+Unity of Knowledge and Action: Wang Yangming: true knowing already involves acting.
+Butterfly Dream: Zhuangzi's story: was he a man dreaming a butterfly, or the reverse?
+Dharma: Cosmic law, duty, or the Buddha's teaching.
+Karma: Actions have consequences that shape future lives.
+Samsara: The cycle of birth, death and rebirth.
+Nirvana: Liberation from craving and from the cycle of rebirth.
+Anatta: The Buddhist teaching that there is no permanent self.
+Sunyata: Emptiness: nothing has independent, inherent existence.
+Dependent Origination: Everything arises in dependence on other conditions.
+Middle Way: Avoiding the extremes of indulgence and asceticism.
+Four Noble Truths: The Buddha's diagnosis: suffering, its cause, its end and the path.
+Brahman: The ultimate reality in Vedanta.
+Atman: The true self, which Advaita identifies with Brahman.
+Maya: The illusion that veils the unity of reality.
+Moksha: Liberation from the cycle of rebirth.
+Ahimsa: Non-violence toward all beings.
+Zazen: Seated meditation in Zen.
+Mindfulness: Attentive, nonjudgmental awareness of the present moment.
+Pure Experience: Nishida's term for experience before the split of subject and object.
+Ubuntu: "I am because we are": personhood arises through community.
+Wabi-sabi: Japanese aesthetic of imperfection, transience and simplicity.
+Confucianism: Ethical tradition of virtue, ritual and social harmony.
+Daoism: Tradition of living in accord with the Dao, spontaneity and simplicity.
+Buddhism: A path to end suffering through insight, ethics and meditation.
+Advaita Vedanta: Non-dual Hindu school in which Atman is Brahman.
+Madhyamaka: Nagarjuna's school of emptiness and the middle way.
+Yogacara: The Buddhist "mind-only" school of consciousness.
+Zen: Buddhist school of direct insight through meditation.
+Legalism: Chinese school that favors strict law and state power.
+Mohism: Impartial care and consequentialist ethics.
+Jainism: Indian tradition centered on non-violence and many-sidedness.
+Neo-Confucianism: Song-Ming revival of Confucianism that absorbed Buddhist and Daoist ideas.
+Kyoto School: Japanese thinkers who fused Zen with Western philosophy.
+Samkhya: Classical Indian dualism of spirit and matter.
+Nyaya: Indian school of logic and epistemology.
+Charvaka: Indian materialist school that rejected karma and rebirth.
+Confucius: Chinese teacher who taught virtue, ritual and humane government.
+Laozi: Legendary author of the Daodejing.
+Zhuangzi: Daoist writer of paradox, humor and perspective.
+Mencius: Confucian who argued that human nature is good.
+Xunzi: Confucian who argued that human nature is bad and needs ritual training.
+Mozi: Taught impartial concern and opposed war and extravagance.
+Han Fei: Legalist who stressed law, statecraft, and rewards and punishments.
+Buddha: Indian teacher who taught the path from suffering to liberation.
+Nagarjuna: Buddhist philosopher of emptiness.
+Vasubandhu: Buddhist thinker who developed Yogacara idealism.
+Shankara: Indian philosopher who systematized Advaita Vedanta.
+Dogen: Japanese Zen master who wrote on time, being and practice.
+Zhu Xi: Song dynasty Neo-Confucian who systematized principle and the Four Books.
+Wang Yangming: Ming Neo-Confucian who taught innate moral knowing and the unity of knowledge and action.
+Nishida Kitaro: Founder of the Kyoto School.
+Mahavira: Twenty-fourth Jain teacher, who taught non-violence.
+`;
+const DESC = {};
+for (const line of DESC_TEXT.split("\n")) {
+  const i = line.indexOf(": ");
+  if (i > 0) DESC[line.slice(0, i).trim()] = line.slice(i + 2).trim();
+}
+
+</script>
+<script>
+(function(){
+'use strict';
+const $ = id => document.getElementById(id);
+if (typeof d3 === 'undefined') { $('fail').hidden = false; return; }
+
+const FUI = "'Schibsted Grotesk', system-ui, -apple-system, 'Segoe UI', sans-serif";
+const FDISP = "'Gloock', Georgia, 'Times New Roman', serif";
+const TYPE_LABEL = {root:'Root', field:'Field', concept:'Concept', school:'School', thinker:'Thinker'};
+const TYPE_NOUN  = {concept:'Concept', school:'School or theory', thinker:'Thinker'};
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const isNarrow = () => window.innerWidth < 760;
+const norm = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+
+/* ---------- graph ---------- */
+const {nodes, links} = buildGraph();
+const byId = new Map(nodes.map(n => [n.id, n]));
+for (const k in GROUPS) { const h = GROUPS[k].color; GROUPS[k].rgb = [1,3,5].map(i => parseInt(h.slice(i,i+2),16)).join(','); }
+
+const nb = new Map(nodes.map(n => [n.id, []]));
+for (const l of links) {
+  nb.get(l.source).push({id:l.target, rel:l.rel, dir:'out'});
+  nb.get(l.target).push({id:l.source, rel:l.rel, dir:'in'});
+}
+nodes.forEach(n => {
+  const e = nb.get(n.id);
+  n.deg = e.filter(x => x.rel !== 'part').length;
+  n.total = e.length;
+  n.key = norm(n.id);
+  n.r = n.type==='root' ? 20
+      : n.type==='field' ? 12 + Math.min(6, n.total/12)
+      : n.type==='school' ? 4.8 + Math.sqrt(n.deg)*.9
+      : n.type==='concept' ? 3.8 + Math.sqrt(n.deg)*.85
+      : 4 + Math.sqrt(n.deg)*.8;
+  n.ls = n.type==='root' ? {f:`400 25px ${FDISP}`, fs:25}
+       : n.type==='field' ? {f:`400 18px ${FDISP}`, fs:18}
+       : n.type==='school' ? {f:`600 13.5px ${FUI}`, fs:13.5}
+       : {f:`500 13px ${FUI}`, fs:13};
+  n.desc = n.type==='root' ? FIELD_DESC.R : n.type==='field' ? FIELD_DESC[n.group] : (DESC[n.id] || '');
+  n.vis = true;
+});
+const realLinkCount = links.filter(l => l.rel !== 'part').length;
+$('stats').textContent = `A living map of philosophy. ${nodes.length - 11} ideas, ${realLinkCount.toLocaleString()} connections.`;
+
+/* ---------- layout ---------- */
+function rng(seed){ return function(){ seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed>>>15, 1|seed); t = t + Math.imul(t ^ t>>>7, 61|t) ^ t; return ((t ^ t>>>14)>>>0)/4294967296; }; }
+const rand = rng(11);
+const RING = 640, anchor = {R:{x:0,y:0}};
+ORDER.forEach((g,i) => { const a = -Math.PI/2 + i*2*Math.PI/ORDER.length; anchor[g] = {x:RING*Math.cos(a), y:RING*Math.sin(a)}; });
+nodes.forEach(n => { const a = anchor[n.group]; n.x = a.x + (rand()-.5)*260; n.y = a.y + (rand()-.5)*260; });
+const root = byId.get('Philosophy'); root.x = 0; root.y = 0; root.fx = 0; root.fy = 0;
+
+const DIST = {part:76, rel:56, infl:62, opp:80};
+const STR  = {part:.05, rel:.2, infl:.16, opp:.04};
+const sim = d3.forceSimulation(nodes)
+  .force('link', d3.forceLink(links).id(d => d.id)
+     .distance(l => l.source.type==='root' ? RING : DIST[l.rel])
+     .strength(l => l.source.type==='root' ? .3 : STR[l.rel]))
+  .force('charge', d3.forceManyBody().strength(d => d.type==='root' ? 0 : d.type==='field' ? -380 : d.type==='school' ? -150 : -76).distanceMax(380))
+  .force('collide', d3.forceCollide(d => d.r + 4.2).strength(.85))
+  .force('x', d3.forceX(d => anchor[d.group].x).strength(d => d.type==='field' ? .5 : d.type==='root' ? 0 : .06))
+  .force('y', d3.forceY(d => anchor[d.group].y).strength(d => d.type==='field' ? .5 : d.type==='root' ? 0 : .06))
+  .velocityDecay(.38).alphaDecay(.028);
+sim.stop();
+for (let i = 0; i < 420; i++) sim.tick();
+
+const pairKey = (a,b) => a < b ? a+'|'+b : b+'|'+a;
+const nodeLinks = new Map(nodes.map(n => [n.id, []]));
+const linkIndex = new Map();
+for (const l of links) {
+  nodeLinks.get(l.source.id).push(l); nodeLinks.get(l.target.id).push(l);
+  const k = pairKey(l.source.id, l.target.id);
+  if (!linkIndex.has(k)) linkIndex.set(k, []);
+  linkIndex.get(k).push(l);
+  l.vis = true;
+}
+const RELPRI = {infl:0, rel:1, opp:2, part:3};
+function findLink(a, b){
+  const arr = linkIndex.get(pairKey(a.id, b.id)); if (!arr) return null;
+  return arr.slice().sort((x,y) => RELPRI[x.rel]-RELPRI[y.rel])[0];
+}
+const PRI = {school:0, concept:1, thinker:2, field:3, root:4};
+const drawOrder = nodes.slice().sort((a,b) => PRI[a.type]-PRI[b.type]);
+const byDegree  = nodes.filter(n => n.type!=='root' && n.type!=='field').sort((a,b) => b.deg-a.deg);
+
+/* ---------- state ---------- */
+const canvas = $('c'), ctx = canvas.getContext('2d');
+let W = 0, H = 0, DPR = 1, tf = d3.zoomIdentity;
+let selected = null, hovered = null, focusNode = null, hiSet = null, hiLinks = [], pathNodes = null;
+let dragging = false, showPart = true;
+const navStack = [];
+const hiddenGroups = new Set(), hiddenTypes = new Set();
+let introT = reduceMotion ? 1 : 0, introStart = 0;
+let T = {};
+
+function readTheme(){
+  const cs = getComputedStyle(document.documentElement), g = n => cs.getPropertyValue(n).trim();
+  T = {bg:g('--bg'), bg2:g('--bg2'), ink:g('--ink'), ink2:g('--ink2'), edge:g('--edge'), out:g('--out'), inn:g('--in'), opp:g('--opp'), halo:g('--halo'), accent:g('--accent'), neb:parseFloat(g('--neb'))||.15};
+}
+readTheme();
+
+/* ---------- drawing ---------- */
+let pending = false;
+function requestDraw(){ if (pending) return; pending = true; requestAnimationFrame(frame); }
+function frame(now){
+  pending = false;
+  if (introT < 1) { if (!introStart) introStart = now; introT = Math.min(1, (now - introStart)/1500); }
+  draw();
+  if (introT < 1) requestDraw();
+}
+const measureCache = new Map();
+function textW(font, s){ const key = font+'|'+s; let w = measureCache.get(key); if (w === undefined){ ctx.font = font; w = ctx.measureText(s).width; measureCache.set(key, w); } return w; }
+function lodMin(k){ return k < .5 ? 99 : k < .75 ? 11 : k < 1 ? 7 : k < 1.4 ? 5 : k < 2 ? 3 : k < 2.8 ? 1 : 0; }
+
+function draw(){
+  const k = tf.k, rs = Math.pow(k, -.3), ease = 1 - Math.pow(1-introT, 3), sc = .35 + .65*ease;
+  const dim = !!hiSet;
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+  ctx.globalAlpha = 1;
+  ctx.fillStyle = T.bg; ctx.fillRect(0,0,W,H);
+  const bg = ctx.createRadialGradient(W*.5,H*.5,0,W*.5,H*.5,Math.max(W,H)*.7);
+  bg.addColorStop(0,T.bg2); bg.addColorStop(1,T.bg);
+  ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
+
+  ctx.setTransform(DPR*k,0,0,DPR*k,tf.x*DPR,tf.y*DPR);
+
+  /* nebulae */
+  const sums = {};
+  for (const n of nodes){ if (!n.vis || n.group==='R') continue; const s = sums[n.group] || (sums[n.group] = {x:0,y:0,c:0}); s.x += n.x; s.y += n.y; s.c++; }
+  for (const g in sums){
+    const s = sums[g], cx = s.x/s.c, cy = s.y/s.c, R = 80 + Math.sqrt(s.c)*26;
+    const gr = ctx.createRadialGradient(cx,cy,0,cx,cy,R);
+    gr.addColorStop(0, `rgba(${GROUPS[g].rgb},${T.neb*ease*(dim?.5:1)})`);
+    gr.addColorStop(1, `rgba(${GROUPS[g].rgb},0)`);
+    ctx.fillStyle = gr; ctx.fillRect(cx-R,cy-R,2*R,2*R);
+  }
+
+  /* edges */
+  ctx.lineCap = 'round';
+  if (!dim){
+    const passes = [['part',.055],['rel',.13],['infl',.21],['opp',.26]];
+    for (const [rel, al] of passes){
+      ctx.beginPath();
+      for (const l of links){ if (l.rel !== rel || !l.vis) continue; ctx.moveTo(l.source.x, l.source.y); ctx.lineTo(l.target.x, l.target.y); }
+      ctx.lineWidth = (rel==='part' ? .8 : 1) / Math.pow(k,.55);
+      ctx.strokeStyle = rel==='opp' ? T.opp : `rgb(${T.edge})`;
+      ctx.globalAlpha = al*ease;
+      if (rel==='opp') ctx.setLineDash([5/k, 4/k]);
+      ctx.stroke(); ctx.setLineDash([]);
+    }
+    if (k > 1.7){
+      ctx.beginPath();
+      for (const l of links){ if (l.rel !== 'infl' || !l.vis) continue; arrow(l.source, l.target, 7/Math.pow(k,.6), rs*sc); }
+      ctx.fillStyle = `rgb(${T.edge})`; ctx.globalAlpha = .4*ease; ctx.fill();
+    }
+  } else {
+    ctx.beginPath();
+    for (const l of links){ if (!l.vis) continue; ctx.moveTo(l.source.x, l.source.y); ctx.lineTo(l.target.x, l.target.y); }
+    ctx.lineWidth = .9/Math.pow(k,.55); ctx.strokeStyle = `rgb(${T.edge})`; ctx.globalAlpha = .05; ctx.stroke();
+    for (const l of hiLinks){
+      let col = `rgb(${T.edge})`, al = .6, lw = 1.7, dash = null;
+      if (pathNodes){ col = T.accent; al = .95; lw = 2.8; }
+      else if (l.rel === 'infl'){ col = (focusNode && l.source === focusNode) ? T.out : T.inn; al = .9; }
+      else if (l.rel === 'opp'){ col = T.opp; al = .85; dash = [5/k,4/k]; }
+      else if (l.rel === 'part'){ al = .35; lw = 1.1; }
+      ctx.beginPath(); ctx.moveTo(l.source.x, l.source.y); ctx.lineTo(l.target.x, l.target.y);
+      ctx.lineWidth = lw/Math.pow(k,.5); ctx.strokeStyle = col; ctx.globalAlpha = al; if (dash) ctx.setLineDash(dash);
+      ctx.stroke(); ctx.setLineDash([]);
+      if (l.rel === 'infl'){ ctx.beginPath(); arrow(l.source, l.target, 9/Math.pow(k,.6), rs*sc); ctx.fillStyle = col; ctx.fill(); }
+    }
+  }
+
+  /* nodes */
+  for (const n of drawOrder){
+    if (!n.vis) continue;
+    const faded = dim && !hiSet.has(n.id);
+    ctx.globalAlpha = (faded ? .13 : 1) * ease;
+    const col = GROUPS[n.group].color, r = n.r*rs*sc, x = n.x, y = n.y;
+    if (n.type === 'concept'){
+      ctx.beginPath(); ctx.arc(x,y,r,0,6.2832); ctx.fillStyle = col; ctx.fill();
+    } else if (n.type === 'school'){
+      const d = r*1.4; ctx.beginPath(); ctx.moveTo(x,y-d); ctx.lineTo(x+d,y); ctx.lineTo(x,y+d); ctx.lineTo(x-d,y); ctx.closePath();
+      ctx.fillStyle = col; ctx.fill(); ctx.lineWidth = .9/Math.pow(k,.5); ctx.strokeStyle = T.bg; ctx.stroke();
+    } else if (n.type === 'thinker'){
+      ctx.beginPath(); ctx.arc(x,y,r,0,6.2832); ctx.fillStyle = T.bg; ctx.fill();
+      ctx.lineWidth = Math.max(1.3, 1.8/Math.pow(k,.5)); ctx.strokeStyle = col; ctx.stroke();
+    } else if (n.type === 'field'){
+      ctx.shadowColor = col; ctx.shadowBlur = faded ? 0 : 20;
+      ctx.beginPath(); ctx.arc(x,y,r,0,6.2832); ctx.fillStyle = col; ctx.fill(); ctx.shadowBlur = 0;
+      ctx.lineWidth = 2/Math.pow(k,.5); ctx.strokeStyle = T.bg; ctx.beginPath(); ctx.arc(x,y,r*.55,0,6.2832); ctx.stroke();
+    } else {
+      ctx.beginPath(); ctx.arc(x,y,r,0,6.2832); ctx.fillStyle = T.ink; ctx.fill();
+      ctx.lineWidth = 1.4/Math.pow(k,.5); ctx.strokeStyle = T.bg;
+      ctx.beginPath(); ctx.arc(x,y,r*.66,0,6.2832); ctx.stroke();
+      ctx.beginPath(); ctx.arc(x,y,r*.32,0,6.2832); ctx.stroke();
+    }
+  }
+  ctx.globalAlpha = 1;
+  const ringFor = (n, col, extra) => { if (!n || !n.vis) return; ctx.beginPath(); ctx.arc(n.x, n.y, n.r*rs*sc*1.35 + extra/k, 0, 6.2832); ctx.lineWidth = 1.8/Math.pow(k,.5); ctx.strokeStyle = col; ctx.stroke(); };
+  if (selected) ringFor(selected, T.ink, 3);
+  if (hovered && hovered !== selected) ringFor(hovered, T.ink2, 3);
+  if (pathNodes){ ringFor(pathNodes[0], T.accent, 3); ringFor(pathNodes[pathNodes.length-1], T.accent, 3); }
+
+  /* labels (screen space) */
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+  ctx.textBaseline = 'middle'; ctx.lineJoin = 'round';
+  const placed = [];
+  const overlaps = (x,y,w,h) => { for (const p of placed){ if (x < p.x+p.w && x+w > p.x && y < p.y+p.h && y+h > p.y) return true; } return false; };
+  const label = (n, force, alpha) => {
+    const sx = n.x*k + tf.x, sy = n.y*k + tf.y;
+    if (sx < -180 || sx > W+180 || sy < -40 || sy > H+40) return;
+    const ls = n.ls, w = textW(ls.f, n.id), rScr = n.r*rs*sc*k, h = ls.fs*1.25;
+    const centered = n.type === 'field' || n.type === 'root';
+    const x = centered ? sx - w/2 : sx + rScr + 5;
+    const y = centered ? sy - rScr - ls.fs*.85 : sy;
+    if (!force && overlaps(x-2, y-h/2, w+4, h)) return;
+    placed.push({x:x-2, y:y-h/2, w:w+4, h});
+    ctx.font = ls.f; ctx.textAlign = 'left';
+    ctx.globalAlpha = alpha*ease;
+    ctx.lineWidth = 3.6; ctx.strokeStyle = T.halo; ctx.strokeText(n.id, x, y);
+    ctx.fillStyle = T.ink; ctx.fillText(n.id, x, y);
+  };
+  if (!dim){
+    for (const n of nodes) if (n.vis && (n.type==='field' || n.type==='root')) label(n, true, 1);
+    const minDeg = lodMin(k);
+    if (minDeg < 99) for (const n of byDegree){
+      if (!n.vis) continue;
+      const need = n.type==='school' ? Math.max(0, minDeg-2) : minDeg;
+      if (n.deg < need) break;
+      label(n, false, 1);
+    }
+  } else {
+    for (const n of nodes) if (n.vis && (n.type==='field' || n.type==='root') && !hiSet.has(n.id)) label(n, true, .3);
+    const must = [];
+    if (pathNodes) must.push(...pathNodes); else if (focusNode) must.push(focusNode);
+    for (const n of must) label(n, true, 1);
+    if (!pathNodes){
+      const others = [...hiSet].map(id => byId.get(id)).filter(n => n && n.vis && n !== focusNode).sort((a,b) => b.deg-a.deg);
+      for (const n of others) label(n, false, 1);
+    }
+  }
+  ctx.globalAlpha = 1;
+}
+function arrow(a, b, size, rScale){
+  const dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx,dy) || 1, ux = dx/d, uy = dy/d;
+  const off = b.r*rScale + size*.35;
+  const tx = b.x - ux*off, ty = b.y - uy*off, bx = tx - ux*size, by = ty - uy*size;
+  ctx.moveTo(tx,ty); ctx.lineTo(bx - uy*size*.42, by + ux*size*.42); ctx.lineTo(bx + uy*size*.42, by - ux*size*.42); ctx.closePath();
+}
+
+/* ---------- view ---------- */
+function resize(){
+  const r = canvas.getBoundingClientRect(); W = r.width; H = r.height;
+  DPR = Math.min(window.devicePixelRatio || 1, 2.5);
+  canvas.width = Math.round(W*DPR); canvas.height = Math.round(H*DPR);
+  requestDraw();
+}
+const zoom = d3.zoom().scaleExtent([.12, 8]).on('zoom', e => { tf = e.transform; if (e.sourceEvent){ dismissHint(); hideTip(); } requestDraw(); });
+function moveTo(t, dur){
+  const s = d3.select(canvas);
+  if (!dur || reduceMotion) s.call(zoom.transform, t); else s.transition().duration(dur).call(zoom.transform, t);
+}
+function insets(){
+  const panelOpen = !$('panel').hidden;
+  if (isNarrow()) return {t:150, r:16, b: panelOpen ? H*.6 : 70, l:16};
+  return {t:84, r: panelOpen ? 384 : 32, b: pathNodes ? 130 : 36, l: 32};
+}
+function fitNodes(list, dur, maxK){
+  list = list.filter(n => n.vis); if (!list.length) return;
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  for (const n of list){ x0 = Math.min(x0, n.x-n.r); y0 = Math.min(y0, n.y-n.r); x1 = Math.max(x1, n.x+n.r); y1 = Math.max(y1, n.y+n.r); }
+  const I = insets(), w = W-I.l-I.r, h = H-I.t-I.b;
+  const k = Math.max(.12, Math.min(maxK || 8, Math.min(w/Math.max(x1-x0,1), h/Math.max(y1-y0,1))*.94));
+  const cx = (x0+x1)/2, cy = (y0+y1)/2;
+  moveTo(d3.zoomIdentity.translate(I.l + w/2 - cx*k, I.t + h/2 - cy*k).scale(k), dur);
+}
+function zoomAt(px, py, f){
+  const nk = Math.max(.12, Math.min(8, tf.k*f)), r = nk/tf.k;
+  moveTo(d3.zoomIdentity.translate(px - (px-tf.x)*r, py - (py-tf.y)*r).scale(nk), 260);
+}
+function panBy(dx, dy){ moveTo(d3.zoomIdentity.translate(tf.x+dx, tf.y+dy).scale(tf.k), 140); }
+/* Frames a node together with the things it connects to, so you see its neighborhood, not just the dot. */
+function frameNeighborhood(n){
+  const list = [n];
+  for (const l of nodeLinks.get(n.id)){
+    if (!l.vis || (l.rel === 'part' && n.type !== 'field')) continue;
+    list.push(l.source === n ? l.target : l.source);
+  }
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  for (const o of list){ x0 = Math.min(x0, o.x-o.r); y0 = Math.min(y0, o.y-o.r); x1 = Math.max(x1, o.x+o.r); y1 = Math.max(y1, o.y+o.r); }
+  const I = insets(), w = W-I.l-I.r, h = H-I.t-I.b;
+  const k = Math.min(2.4, Math.min(w/Math.max(x1-x0,1), h/Math.max(y1-y0,1))*.88);
+  if (k < .7){ focusOn(n); return; }
+  moveTo(d3.zoomIdentity.translate(I.l + w/2 - (x0+x1)/2*k, I.t + h/2 - (y0+y1)/2*k).scale(k), 750);
+}
+function focusOn(n){
+  const I = insets(), k = Math.max(tf.k, 1.3), w = W-I.l-I.r, h = H-I.t-I.b;
+  moveTo(d3.zoomIdentity.translate(I.l + w/2 - n.x*k, I.t + h/2 - n.y*k).scale(k), 700);
+}
+function ensureVisible(n){
+  const I = insets(), sx = n.x*tf.k + tf.x, sy = n.y*tf.k + tf.y;
+  let dx = 0, dy = 0;
+  if (sx < I.l+30) dx = I.l+30 - sx; else if (sx > W-I.r-30) dx = W-I.r-30 - sx;
+  if (sy < I.t+20) dy = I.t+20 - sy; else if (sy > H-I.b-20) dy = H-I.b-20 - sy;
+  if (dx || dy) moveTo(d3.zoomIdentity.translate(tf.x+dx, tf.y+dy).scale(tf.k), 450);
+}
+function hit(px, py){
+  const x = (px-tf.x)/tf.k, y = (py-tf.y)/tf.k, rs = Math.pow(tf.k,-.3);
+  let best = null, bd = Infinity;
+  for (const n of nodes){
+    if (!n.vis) continue;
+    const d = Math.hypot(n.x-x, n.y-y);
+    if (d < n.r*rs*1.15 + 7/tf.k && d < bd){ bd = d; best = n; }
+  }
+  return best;
+}
+
+/* ---------- focus / selection ---------- */
+function updateFocus(){
+  hiSet = null; hiLinks = [];
+  if (pathNodes){
+    hiSet = new Set(pathNodes.map(n => n.id));
+    for (let i = 0; i < pathNodes.length-1; i++){ const l = findLink(pathNodes[i], pathNodes[i+1]); if (l) hiLinks.push(l); }
+    focusNode = null;
+  } else {
+    const f = hovered || selected; focusNode = f;
+    if (f){
+      hiSet = new Set([f.id]);
+      for (const l of nodeLinks.get(f.id)){ if (!l.vis) continue; hiLinks.push(l); hiSet.add(l.source.id === f.id ? l.target.id : l.source.id); }
+    }
+  }
+  requestDraw();
+}
+function select(n, opts){
+  opts = opts || {};
+  if (n && opts.push && selected && selected !== n) navStack.push(selected);
+  if (!n) navStack.length = 0;
+  selected = n;
+  if (!n){ $('panel').hidden = true; document.body.classList.remove('panel-open'); updateFocus(); return; }
+  renderPanel(n);
+  $('panel').hidden = false; document.body.classList.add('panel-open');
+  $('live').textContent = 'Selected ' + n.id;
+  updateFocus();
+  if (opts.focus) frameNeighborhood(n); else ensureVisible(n);
+}
+
+/* ---------- panel ---------- */
+function chip(n, onclick){
+  const b = document.createElement('button'); b.type = 'button'; b.className = 'chip';
+  const d = document.createElement('span'); d.className = 'dot'; d.style.setProperty('--c', GROUPS[n.group].color);
+  const t = document.createElement('span'); t.textContent = n.id;
+  b.append(d, t); setNodeTip(b, n); b.addEventListener('click', onclick || (() => select(n, {focus:true, push:true})));
+  return b;
+}
+function renderPanel(n){
+  const p = $('panel'); p.innerHTML = '';
+  const g = GROUPS[n.group];
+  const close = document.createElement('button'); close.className = 'close'; close.type = 'button'; close.setAttribute('aria-label','Close details'); close.textContent = '\u00d7';
+  close.dataset.tip = 'Closes this panel and clears the highlight.';
+  close.addEventListener('click', () => select(null));
+  const kind = document.createElement('div'); kind.className = 'kind';
+  const dot = document.createElement('span'); dot.className = 'dot'; dot.style.setProperty('--c', g.color);
+  const kt = document.createElement('span');
+  kt.textContent = kindText(n);
+  kind.dataset.tip = n.type==='concept' ? 'A concept is an idea, problem or argument. Concepts are drawn as filled circles.' : n.type==='school' ? 'A school is a movement, theory or tradition. Schools are drawn as diamonds.' : n.type==='thinker' ? 'A thinker is a person. Thinkers are drawn as rings.' : 'A field groups related concepts, schools and thinkers around one big question.';
+  kind.append(dot, kt);
+  const h = document.createElement('h2'); h.className = 'name'; h.textContent = n.id;
+  const desc = document.createElement('p'); desc.className = 'desc';
+  const e = nb.get(n.id).filter(x => x.rel !== 'part');
+  const touched = new Set(e.map(x => byId.get(x.id).group).filter(x => x !== n.group && x !== 'R'));
+  desc.textContent = n.desc;
+  const meta = document.createElement('p'); meta.className = 'meta';
+  if (n.type !== 'root' && n.type !== 'field') meta.textContent = `${n.deg} direct connection${n.deg===1?'':'s'}` + (touched.size ? `, reaching into ${touched.size} other field${touched.size===1?'':'s'}.` : '.');
+  p.append(close);
+  if (navStack.length){
+    const prev = navStack[navStack.length-1];
+    const back = document.createElement('button'); back.type = 'button'; back.className = 'back'; back.textContent = 'Back to ' + prev.id;
+    back.dataset.tip = 'Return to the previous idea you were looking at.';
+    back.addEventListener('click', () => { const pv = navStack.pop(); if (pv) select(pv, {focus:true}); });
+    p.appendChild(back);
+  }
+  p.append(kind, h, desc);
+  if (meta.textContent) p.appendChild(meta);
+
+  const by = pred => nb.get(n.id).filter(pred).map(x => byId.get(x.id)).sort((a,b) => b.deg-a.deg);
+  const section = (title, list, color, cls, tip) => {
+    if (!list.length) return;
+    const s = document.createElement('section'); s.className = 'psec' + (cls ? ' '+cls : ''); s.style.setProperty('--m', color);
+    const h3 = document.createElement('h3'); h3.textContent = title; if (tip) h3.dataset.tip = tip;
+    const c = document.createElement('div'); c.className = 'chips'; list.forEach(x => c.appendChild(chip(x)));
+    s.append(h3, c); p.appendChild(s);
+  };
+  section('Influenced by', by(x => x.rel==='infl' && x.dir==='in'), 'var(--in)', '', 'Earlier people or ideas that shaped this one. Teal lines on the map.');
+  section('Influences', by(x => x.rel==='infl' && x.dir==='out'), 'var(--out)', '', 'Later people or ideas that this one shaped. Amber lines on the map.');
+  section('Contrasts with', by(x => x.rel==='opp'), 'var(--opp)', 'opp', 'Rival or opposing positions. Red dashed lines on the map.');
+  section('Related to', by(x => x.rel==='rel'), 'var(--ink2)', '', 'Closely linked ideas, without a claim about which came first.');
+  if (n.type==='root' || n.type==='field') section(`Contains ${by(x => x.rel==='part' && x.dir==='out').length}`, by(x => x.rel==='part' && x.dir==='out'), 'var(--ink2)', '', 'The concepts and schools that belong to this field.');
+  else section('Part of', by(x => x.rel==='part' && x.dir==='in'), 'var(--ink2)', '', 'The field this idea belongs to.');
+
+  if (touched.size && n.type !== 'field' && n.type !== 'root'){
+    const s = document.createElement('section'); s.className = 'psec'; s.style.setProperty('--m','transparent');
+    const h3 = document.createElement('h3'); h3.textContent = 'Also touches'; h3.dataset.tip = 'Other fields this idea has direct connections into.';
+    const c = document.createElement('div'); c.className = 'chips';
+    for (const gk of ORDER.filter(x => touched.has(x))){
+      const sp = document.createElement('span'); sp.className = 'chip static'; sp.dataset.tipTitle = GROUPS[gk].name; sp.dataset.tip = FIELD_DESC[gk];
+      const d = document.createElement('span'); d.className = 'dot'; d.style.setProperty('--c', GROUPS[gk].color);
+      const t = document.createElement('span'); t.textContent = GROUPS[gk].name; sp.append(d, t); c.appendChild(sp);
+    }
+    s.append(h3, c); p.appendChild(s);
+  }
+
+  if (n.type !== 'root'){
+    const tr = document.createElement('div'); tr.className = 'trace';
+    tr.innerHTML = '<label for="traceIn" data-tip="Finds the shortest chain of connections from this idea to another and highlights it on the map.">Trace a path to another idea</label><div class="searchwrap"><input id="traceIn" type="search" placeholder="Type a name" autocomplete="off"><ul class="results" role="listbox" hidden></ul></div>';
+    p.appendChild(tr);
+    makeSearch(tr.querySelector('input'), tr.querySelector('ul'), t => {
+      const path = shortestPath(n, t);
+      if (path) setPath(path);
+    });
+  }
+  p.scrollTop = 0;
+}
+
+/* ---------- search ---------- */
+function makeSearch(input, list, onPick){
+  let items = [], active = -1;
+  const render = () => {
+    list.innerHTML = '';
+    items.forEach((n, i) => {
+      const li = document.createElement('li'); li.setAttribute('role','option');
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'res' + (i===active ? ' active' : ''); b.tabIndex = -1;
+      const d = document.createElement('span'); d.className = 'dot'; d.style.setProperty('--c', GROUPS[n.group].color);
+      const a = document.createElement('span'); a.textContent = n.id;
+      const t = document.createElement('span'); t.className = 'rt'; t.textContent = TYPE_LABEL[n.type];
+      b.append(d, a, t); b.addEventListener('pointerdown', ev => { ev.preventDefault(); pick(n); });
+      li.appendChild(b); list.appendChild(li);
+    });
+    list.hidden = !items.length;
+  };
+  const pick = n => { items = []; render(); input.value = ''; input.blur(); onPick(n); };
+  input.addEventListener('input', () => {
+    const q = norm(input.value.trim()); active = -1;
+    if (!q){ items = []; render(); return; }
+    const scored = [];
+    for (const n of nodes){
+      if (n.type === 'root') continue;
+      const i = n.key.indexOf(q); if (i < 0) continue;
+      const score = (i === 0 ? 0 : n.key[i-1] === ' ' ? 1 : 2) * 100 - Math.min(n.deg, 60);
+      scored.push([score, n]);
+    }
+    scored.sort((a,b) => a[0]-b[0]); items = scored.slice(0,8).map(x => x[1]); render();
+  });
+  input.addEventListener('keydown', e => {
+    if (e.key === 'ArrowDown'){ e.preventDefault(); active = Math.min(items.length-1, active+1); render(); }
+    else if (e.key === 'ArrowUp'){ e.preventDefault(); active = Math.max(0, active-1); render(); }
+    else if (e.key === 'Enter'){ if (items.length) pick(items[active >= 0 ? active : 0]); }
+    else if (e.key === 'Escape'){ items = []; render(); input.blur(); }
+  });
+  input.addEventListener('blur', () => { setTimeout(() => { list.hidden = true; }, 150); });
+}
+makeSearch($('q'), $('qres'), n => select(n, {focus:true, push:true}));
+window.addEventListener('keydown', e => {
+  const tag = document.activeElement && document.activeElement.tagName;
+  if (tag === 'INPUT' || tag === 'TEXTAREA' || e.metaKey || e.ctrlKey || e.altKey) return;
+  const step = 110;
+  if (e.key === '/'){ e.preventDefault(); $('q').focus(); }
+  else if (e.key === 'Escape'){ if (pathNodes) clearPath(); else if (selected) select(null); }
+  else if (e.key === '+' || e.key === '='){ zoomAt(W/2, H/2, 1.4); }
+  else if (e.key === '-' || e.key === '_'){ zoomAt(W/2, H/2, 1/1.4); }
+  else if (e.key === '0'){ $('btnFit').click(); }
+  else if (e.key === 'ArrowLeft'){ e.preventDefault(); panBy(step, 0); }
+  else if (e.key === 'ArrowRight'){ e.preventDefault(); panBy(-step, 0); }
+  else if (e.key === 'ArrowUp'){ e.preventDefault(); panBy(0, step); }
+  else if (e.key === 'ArrowDown'){ e.preventDefault(); panBy(0, -step); }
+});
+
+/* ---------- paths ---------- */
+function shortestPath(a, b){
+  if (a === b) return null;
+  for (const allowPart of [false, true]){
+    const prev = new Map([[a.id, null]]), q = [a.id];
+    while (q.length && !prev.has(b.id)){
+      const c = q.shift();
+      for (const x of nb.get(c)){ if (!allowPart && x.rel === 'part') continue; if (prev.has(x.id)) continue; prev.set(x.id, c); q.push(x.id); }
+    }
+    if (prev.has(b.id)){ const out = []; let c = b.id; while (c){ out.push(byId.get(c)); c = prev.get(c); } return out.reverse(); }
+  }
+  return null;
+}
+function relText(l, from){
+  if (!l) return 'connects to';
+  if (l.rel === 'infl') return l.source === from ? 'influenced' : 'was influenced by';
+  if (l.rel === 'opp') return 'contrasts with';
+  if (l.rel === 'part') return l.source === from ? 'contains' : 'belongs to';
+  return 'is related to';
+}
+function relTip(l){
+  if (!l) return 'These two ideas are connected.';
+  if (l.rel === 'infl') return 'An influence link: the earlier idea or thinker shaped the later one.';
+  if (l.rel === 'opp') return 'A contrast link: rival or opposing positions.';
+  if (l.rel === 'part') return 'A hub link: a concept or school and the field it belongs to.';
+  return 'A relatedness link: closely connected ideas, with no claim about direction.';
+}
+function setPath(path){
+  pathNodes = path;
+  const a = path[0], b = path[path.length-1];
+  $('pathTitle').textContent = `${a.id} to ${b.id} in ${path.length-1} step${path.length===2?'':'s'}`;
+  const chain = $('chain'); chain.innerHTML = '';
+  path.forEach((n, i) => {
+    if (i > 0){ const s = document.createElement('span'); s.className = 'rel'; const lk = findLink(path[i-1], n); s.textContent = relText(lk, path[i-1]); s.dataset.tip = relTip(lk); chain.appendChild(s); }
+    chain.appendChild(chip(n, () => { select(n, {focus:false}); }));
+  });
+  $('pathbar').hidden = false;
+  $('live').textContent = 'Path found: ' + path.map(n => n.id).join(', ');
+  updateFocus();
+  fitNodes(path, 800, 2.4);
+}
+function clearPath(){ pathNodes = null; $('pathbar').hidden = true; updateFocus(); }
+$('btnClearPath').addEventListener('click', clearPath);
+$('btnSurprise').addEventListener('click', () => {
+  const pool = nodes.filter(n => n.type !== 'root' && n.type !== 'field' && n.vis);
+  let best = null;
+  for (let i = 0; i < 400; i++){
+    const a = pool[Math.floor(Math.random()*pool.length)], b = pool[Math.floor(Math.random()*pool.length)];
+    if (a === b || a.group === b.group) continue;
+    const p = shortestPath(a, b);
+    if (p && p.length >= 4 && p.length <= 6){ best = p; break; }
+    if (p && !best) best = p;
+  }
+  if (best){ select(null); setPath(best); }
+});
+$('btnZoomIn').addEventListener('click', () => zoomAt(W/2, H/2, 1.5));
+$('btnZoomOut').addEventListener('click', () => zoomAt(W/2, H/2, 1/1.5));
+$('btnFit').addEventListener('click', () => { clearPath(); select(null); fitNodes(nodes, 700); });
+
+/* ---------- filters ---------- */
+function applyFilters(){
+  for (const n of nodes) n.vis = n.type === 'root' || (!hiddenGroups.has(n.group) && !hiddenTypes.has(n.type));
+  for (const l of links) l.vis = l.source.vis && l.target.vis && (l.rel !== 'part' || showPart);
+  if (selected && !selected.vis) select(null);
+  if (hovered && !hovered.vis) hovered = null;
+  if (pathNodes && pathNodes.some(n => !n.vis)) clearPath();
+  const any = hiddenGroups.size || hiddenTypes.size || !showPart;
+  const rb = document.querySelector('#legend .reset'); if (rb) rb.hidden = !any;
+  updateFocus();
+}
+(function buildLegend(){
+  const L = $('legend');
+  const counts = {}; nodes.forEach(n => { if (n.type !== 'field' && n.type !== 'root') counts[n.group] = (counts[n.group]||0)+1; });
+  const tcounts = {}; nodes.forEach(n => { tcounts[n.type] = (tcounts[n.type]||0)+1; });
+  const sec1 = document.createElement('div'); sec1.className = 'sec'; sec1.innerHTML = '<h2>Fields</h2>';
+  const toggles = [];
+  const EYE = '<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.5 8s2.4-4.5 6.5-4.5S14.5 8 14.5 8 12.1 12.5 8 12.5 1.5 8 1.5 8z" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="8" cy="8" r="2" fill="currentColor"/><path class="slash" d="M2.5 13.5 13.5 2.5" stroke="currentColor" stroke-width="1.8"/></svg>';
+  for (const g of ORDER){
+    const row = document.createElement('div'); row.className = 'chiprow'; row.style.setProperty('--c', GROUPS[g].color);
+    const go = document.createElement('button'); go.type = 'button'; go.className = 'chipbtn go';
+    go.innerHTML = '<span class="dot"></span><span class="t"></span><span class="n"></span>';
+    go.querySelector('.dot').style.setProperty('--c', GROUPS[g].color);
+    go.querySelector('.t').textContent = GROUPS[g].name; go.querySelector('.n').textContent = counts[g];
+    go.dataset.tipTitle = GROUPS[g].name; go.dataset.tip = FIELD_DESC[g] + ' Click to fly to this field.';
+    const eye = document.createElement('button'); eye.type = 'button'; eye.className = 'eye'; eye.setAttribute('aria-pressed','true');
+    eye.setAttribute('aria-label', 'Show or hide ' + GROUPS[g].name); eye.innerHTML = EYE;
+    eye.dataset.tip = 'Hide or show everything in ' + GROUPS[g].name + '.';
+    const setGroup = on => { if (on) hiddenGroups.delete(g); else hiddenGroups.add(g); row.classList.toggle('off', !on); eye.setAttribute('aria-pressed', on ? 'true' : 'false'); applyFilters(); };
+    go.addEventListener('click', () => {
+      if (hiddenGroups.has(g)) setGroup(true);
+      const hub = byId.get(FIELD_NAMES[g]);
+      clearPath(); select(hub, {focus:false});
+      fitNodes(nodes.filter(n => n.group === g && n.vis), 800, 2.2);
+    });
+    eye.addEventListener('click', () => setGroup(hiddenGroups.has(g)));
+    row.append(go, eye); toggles.push({b:eye, row, kind:'g', key:g}); sec1.appendChild(row);
+  }
+  const sec2 = document.createElement('div'); sec2.className = 'sec'; sec2.innerHTML = '<h2>Show</h2>';
+  const icons = {
+    concept:'<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="4.5" fill="currentColor"/></svg>',
+    school:'<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 .5 11.5 6 6 11.5.5 6z" fill="currentColor"/></svg>',
+    thinker:'<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>',
+    hub:'<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M1 10 11 2" stroke="currentColor" stroke-width="1.4" opacity=".55"/></svg>'
+  };
+  const tdefs = [
+    ['concept','Concepts',tcounts.concept,'Ideas, problems and arguments, drawn as filled circles. Click to hide or show them.'],
+    ['school','Schools and theories',tcounts.school,'Movements, traditions and theories, drawn as diamonds. Click to hide or show them.'],
+    ['thinker','Thinkers',tcounts.thinker,'People, drawn as rings. Click to hide or show them.'],
+    ['hub','Lines to fields','','The faint lines tying each concept and school to its field. Hide them to see only the meaningful connections.']];
+  for (const [key, name, cnt, tip] of tdefs){
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'chipbtn'; b.setAttribute('aria-pressed','true');
+    b.innerHTML = icons[key] + '<span class="t"></span><span class="n"></span>';
+    b.querySelector('.t').textContent = name; b.querySelector('.n').textContent = cnt;
+    b.dataset.tipTitle = name; b.dataset.tip = tip;
+    b.addEventListener('click', () => {
+      let on;
+      if (key === 'hub'){ showPart = !showPart; on = showPart; }
+      else { on = hiddenTypes.has(key); on ? hiddenTypes.delete(key) : hiddenTypes.add(key); }
+      b.setAttribute('aria-pressed', on ? 'true' : 'false'); applyFilters();
+    });
+    toggles.push({b, kind:'t', key}); sec2.appendChild(b);
+  }
+  const sec3 = document.createElement('div'); sec3.className = 'sec keys';
+  sec3.innerHTML = '<h2>Lines</h2>' +
+    '<div class="key" data-tip-title="Influenced" data-tip="An arrow runs from the earlier idea or thinker to the one it shaped. When you select a node, amber lines are what it influenced and teal lines are what influenced it."><svg width="26" height="10" aria-hidden="true"><path d="M1 5h18" stroke="var(--out)" stroke-width="2"/><path d="M25 5 18 1.5v7z" fill="var(--out)"/></svg>Influenced</div>' +
+    '<div class="key" data-tip-title="Contrasts with" data-tip="A dashed red line joins rival or opposing positions, such as rationalism and empiricism."><svg width="26" height="10" aria-hidden="true"><path d="M1 5h24" stroke="var(--opp)" stroke-width="2" stroke-dasharray="4 3"/></svg>Contrasts with</div>' +
+    '<div class="key" data-tip-title="Related" data-tip="A plain line joins closely connected ideas, with no claim about which came first."><svg width="26" height="10" aria-hidden="true"><path d="M1 5h24" stroke="var(--ink2)" stroke-width="1.5"/></svg>Related</div>';
+  const reset = document.createElement('button'); reset.type = 'button'; reset.className = 'reset'; reset.textContent = 'Show everything'; reset.hidden = true; reset.dataset.tip = 'Brings back every hidden field, node type and line.';
+  reset.addEventListener('click', () => {
+    hiddenGroups.clear(); hiddenTypes.clear(); showPart = true;
+    toggles.forEach(t => { t.b.setAttribute('aria-pressed','true'); if (t.row) t.row.classList.remove('off'); }); applyFilters();
+  });
+  L.append(sec1, sec2, sec3, reset);
+})();
+
+/* ---------- tooltips ---------- */
+const tipEl = $('tip');
+let tipTimer = null, touchTimer = null, tipHideTimer = null, longPressed = false;
+function kindText(n){ return n.type==='root' ? 'The whole discipline' : n.type==='field' ? 'A field of philosophy' : `${TYPE_NOUN[n.type]} in ${GROUPS[n.group].name}`; }
+function setNodeTip(el, n){ if (!n.desc) return; el.dataset.tip = n.desc; el.dataset.tipTitle = n.id; el.dataset.tipKind = kindText(n); el.dataset.tipDot = GROUPS[n.group].color; }
+function uiRects(){
+  const out = [];
+  document.querySelectorAll('.top .brand,.top .searchwrap,.top .tools,#panel,#pathbar,#legend').forEach(el => {
+    if (el.hidden) return; const r = el.getBoundingClientRect(); if (r.width > 0 && r.height > 0) out.push(r);
+  });
+  return out;
+}
+function overlapArea(a, b){
+  const w = Math.min(a.right, b.right) - Math.max(a.left, b.left), h = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
+  return (w > 0 && h > 0) ? w*h : 0;
+}
+/* Puts the tooltip as close to the anchor as possible without covering it or any other piece of the interface. */
+function placeTip(anchor, host){
+  const vw = document.documentElement.clientWidth || window.innerWidth, vh = window.innerHeight, gap = 10, m = 8;
+  const tw = tipEl.offsetWidth, th = tipEl.offsetHeight, h = host || anchor;
+  const cx = (anchor.left + anchor.right)/2, cy = (anchor.top + anchor.bottom)/2;
+  const avoid = uiRects();
+  const xs = [h.right + gap, h.left - gap - tw, cx - tw/2, anchor.right + gap, anchor.left - gap - tw];
+  const ys = [cy - th/2, h.bottom + gap, h.top - gap - th, anchor.bottom + gap, anchor.top - gap - th];
+  for (const r of avoid){ xs.push(r.left - gap - tw, r.right + gap); ys.push(r.top - gap - th, r.bottom + gap); }
+  let best = null;
+  for (const cxp of xs) for (const cyp of ys){
+    const x = Math.min(Math.max(m, cxp), vw - tw - m), y = Math.min(Math.max(m, cyp), vh - th - m);
+    const rect = {left:x, top:y, right:x+tw, bottom:y+th};
+    let pen = (Math.abs(x-cxp) + Math.abs(y-cyp)) * 300;
+    for (const r of avoid) pen += overlapArea(rect, r) * 10;
+    pen += (overlapArea(rect, anchor) + overlapArea(rect, h)) * 40;
+    pen += Math.hypot(x + tw/2 - cx, y + th/2 - cy) * 20;
+    if (!best || pen < best.pen) best = {x, y, pen};
+  }
+  tipEl.style.left = best.x + 'px'; tipEl.style.top = best.y + 'px';
+}
+function showTip(info, anchor, host){
+  tipEl.innerHTML = '';
+  if (info.kind){
+    const k = document.createElement('div'); k.className = 'tk';
+    if (info.dot){ const d = document.createElement('span'); d.className = 'dot'; d.style.setProperty('--c', info.dot); k.appendChild(d); }
+    const s = document.createElement('span'); s.textContent = info.kind; k.appendChild(s); tipEl.appendChild(k);
+  }
+  if (info.title){ const t = document.createElement('div'); t.className = 'tt'; t.textContent = info.title; tipEl.appendChild(t); }
+  const b = document.createElement('div'); b.className = 'tb'; b.textContent = info.text; tipEl.appendChild(b);
+  tipEl.style.visibility = 'hidden'; tipEl.hidden = false; tipEl.style.left = '0px'; tipEl.style.top = '0px';
+  placeTip(anchor, host);
+  tipEl.style.visibility = 'visible';
+}
+function hideTip(){ clearTimeout(tipTimer); clearTimeout(tipHideTimer); tipEl.hidden = true; }
+function tipForEl(el){
+  if (!el || !el.dataset.tip) return;
+  const host = el.closest('#panel,#legend,#pathbar,.top .tools,.top .searchwrap,.top .brand');
+  showTip({title:el.dataset.tipTitle, kind:el.dataset.tipKind, dot:el.dataset.tipDot, text:el.dataset.tip},
+          el.getBoundingClientRect(), (host && host !== el) ? host.getBoundingClientRect() : null);
+}
+function nodeAnchor(n){
+  const cr = canvas.getBoundingClientRect(), k = tf.k, rs = Math.pow(k, -.3);
+  const sx = cr.left + n.x*k + tf.x, sy = cr.top + n.y*k + tf.y, rr = n.r*rs*k, w = textW(n.ls.f, n.id);
+  let l = sx-rr-3, r = sx+rr+3, t = sy-rr-3, b = sy+rr+3;
+  if (n.type === 'field' || n.type === 'root'){ l = Math.min(l, sx-w/2); r = Math.max(r, sx+w/2); t = Math.min(t, sy-rr-n.ls.fs*1.6); }
+  else r = Math.max(r, sx+rr+7+w);
+  return {left:l, right:r, top:t, bottom:b};
+}
+function showNodeTip(n){
+  if (!n.desc || dragging || hovered !== n) return;
+  showTip({kind:kindText(n), dot:GROUPS[n.group].color, title:n.id, text:n.desc}, nodeAnchor(n), null);
+}
+document.addEventListener('pointerover', e => {
+  if (e.pointerType === 'touch') return;
+  const el = e.target.closest && e.target.closest('[data-tip]'); if (!el) return;
+  clearTimeout(tipTimer); tipTimer = setTimeout(() => tipForEl(el), 280);
+});
+document.addEventListener('pointerout', e => {
+  const el = e.target.closest && e.target.closest('[data-tip]'); if (!el) return;
+  if (e.relatedTarget && el.contains(e.relatedTarget)) return;
+  hideTip();
+});
+document.addEventListener('pointerdown', e => {
+  longPressed = false; hideTip(); clearTimeout(touchTimer);
+  if (e.pointerType === 'touch'){
+    const el = e.target.closest && e.target.closest('[data-tip]');
+    if (el) touchTimer = setTimeout(() => { longPressed = true; tipForEl(el); tipHideTimer = setTimeout(hideTip, 4500); }, 480);
+  }
+}, true);
+['pointerup','pointercancel'].forEach(t => document.addEventListener(t, () => clearTimeout(touchTimer), true));
+document.addEventListener('click', e => { if (longPressed){ longPressed = false; e.preventDefault(); e.stopPropagation(); } }, true);
+document.addEventListener('focusin', e => { const el = e.target; if (el.dataset && el.dataset.tip && el.tagName !== 'INPUT' && el.matches(':focus-visible')) tipForEl(el); });
+document.addEventListener('focusout', hideTip);
+document.addEventListener('input', hideTip);
+window.addEventListener('scroll', hideTip, true);
+
+/* ---------- interaction ---------- */
+const drag = d3.drag().container(canvas)
+  .subject(e => { const n = hit(e.x, e.y); return (n && n.type !== 'root') ? {x:e.x, y:e.y, node:n} : null; })
+  .on('start', e => { dragging = true; dismissHint(); hideTip(); if (!e.active) sim.alphaTarget(.25).restart(); const n = e.subject.node; n.fx = (e.x-tf.x)/tf.k; n.fy = (e.y-tf.y)/tf.k; })
+  .on('drag',  e => { const n = e.subject.node; n.fx = (e.x-tf.x)/tf.k; n.fy = (e.y-tf.y)/tf.k; })
+  .on('end',   e => { dragging = false; if (!e.active) sim.alphaTarget(0); const n = e.subject.node; n.fx = null; n.fy = null; });
+d3.select(canvas).call(drag).call(zoom).on('dblclick.zoom', null);
+
+canvas.addEventListener('pointermove', e => {
+  if (dragging || e.pointerType !== 'mouse') return;
+  const r = canvas.getBoundingClientRect(), n = hit(e.clientX-r.left, e.clientY-r.top);
+  if (n !== hovered){ hovered = n; canvas.style.cursor = n ? 'pointer' : ''; updateFocus(); hideTip(); if (n) tipTimer = setTimeout(() => showNodeTip(n), 180); }
+});
+canvas.addEventListener('pointerleave', () => { hideTip(); if (hovered){ hovered = null; updateFocus(); } });
+canvas.addEventListener('click', e => {
+  const r = canvas.getBoundingClientRect(), n = hit(e.clientX-r.left, e.clientY-r.top);
+  if (n) select(n, {focus:false}); else if (selected) select(null);
+});
+canvas.addEventListener('dblclick', e => {
+  const r = canvas.getBoundingClientRect(), px = e.clientX-r.left, py = e.clientY-r.top, n = hit(px, py);
+  if (n) select(n, {focus:true}); else zoomAt(px, py, 1.8);
+});
+sim.on('tick', requestDraw);
+
+let hintGone = false;
+if (window.matchMedia('(hover: none)').matches) $('hint').textContent = 'Tap a node for its description. Pinch to zoom, drag to move. Long-press a control to learn what it does.';
+function dismissHint(){ if (hintGone) return; hintGone = true; $('hint').classList.add('gone'); }
+setTimeout(dismissHint, 9000);
+
+/* ---------- theme & fonts ---------- */
+const mq = window.matchMedia('(prefers-color-scheme: dark)');
+const onTheme = () => { readTheme(); requestDraw(); };
+if (mq.addEventListener) mq.addEventListener('change', onTheme); else if (mq.addListener) mq.addListener(onTheme);
+new MutationObserver(onTheme).observe(document.documentElement, {attributes:true, attributeFilter:['data-theme']});
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { measureCache.clear(); requestDraw(); });
+
+/* ---------- boot ---------- */
+resize();
+if (typeof ResizeObserver !== 'undefined') new ResizeObserver(() => resize()).observe(canvas); else window.addEventListener('resize', resize);
+fitNodes(nodes, 0);
+sim.alpha(.06).restart();
+requestDraw();
+})();
+</script>
+</body>
+</html>
